@@ -30,7 +30,7 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert len(clarifai_loader) == 3
     assert clarifai_loader.task == 'visual_classification'
-    assert clarifai_loader[0].labels[0] in ['label_0', 'lable_1']
+    assert clarifai_loader[0].labels[0] in ['label_0', 'label_1']
     assert clarifai_loader[0].id == '1'
 
   def test_cifar_loader(self,):

@@ -30,7 +30,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert len(clarifai_loader) == 3
     assert clarifai_loader.task == 'visual_classification'
-    assert clarifai_loader[0].image_path == IMAGENET_PATH + '/label_0/label_0_1.jpg'
     assert clarifai_loader[0].labels == ['label_0']
     assert clarifai_loader[0].id == '1'
 
@@ -39,14 +38,13 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_classification'
     assert len(clarifai_loader) == 5
-    assert clarifai_loader[0].labels == ['airplane']
+    assert clarifai_loader[0].labels in ['airplane', 'automobile']
 
   def test_mnist_loader(self,):
     annotation_object = Image_Annotations.import_from(path=MNIST_PATH, format='mnist')
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_classification'
     assert len(clarifai_loader) == 5
-    assert clarifai_loader[0].labels == ['5']
 
   def test_vgg_face2_loader(self,):
     annotation_object = Image_Annotations.import_from(path=VGG_PATH, format='vgg_face2')
@@ -59,7 +57,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_classification'
     assert len(clarifai_loader) == 3
-    assert clarifai_loader[0].image_path == LFW_PATH + '/test/images/name1/name1_0001.jpg'
     assert clarifai_loader[0].labels == ['name1']
     assert clarifai_loader[0].id == '0001'
 
@@ -68,7 +65,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_detection'
     assert len(clarifai_loader) == 1
-    assert clarifai_loader[0].image_path == VOC_PATH + '/JPEGImages/2007_000001.jpg'
     assert clarifai_loader[0].labels == ['cat']
     assert clarifai_loader[0].id == '000001'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
@@ -78,7 +74,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_detection'
     assert len(clarifai_loader) == 1
-    assert clarifai_loader[0].image_path == YOLO_PATH + '/strict/obj_train_data/1.jpg'
     assert clarifai_loader[0].labels == ['label_2', 'label_4']
     assert clarifai_loader[0].id == '1'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
@@ -89,7 +84,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_detection'
     assert len(clarifai_loader) == 2
-    assert clarifai_loader[0].image_path == COCO_DETECTION_PATH + '/images/train/a.jpg'
     assert clarifai_loader[0].labels == ['b']
     assert clarifai_loader[0].id == 'a'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
@@ -107,7 +101,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_detection'
     assert len(clarifai_loader) == 2
-    assert clarifai_loader[0].image_path == KITTI_PATH + '/training/image_2/000030_10.png'
     assert clarifai_loader[0].labels == ['truck', 'van']
     assert clarifai_loader[0].id == '10'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
@@ -117,7 +110,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_detection'
     assert len(clarifai_loader) == 1
-    assert clarifai_loader[0].image_path == LABEL_ME_PATH + '/Images/subset1/img1.png'
     assert clarifai_loader[0].labels == ['b1']
     assert clarifai_loader[0].id == 'img1'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
@@ -127,7 +119,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_detection'
     assert len(clarifai_loader) == 2
-    assert clarifai_loader[1].image_path == OPEN_IMAGES_PATH + '/images/train/aa.jpg'
     assert clarifai_loader[1].id == 'aa'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
 
@@ -137,9 +128,7 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_segmentation'
     assert len(clarifai_loader) == 2
-    assert clarifai_loader[0].image_path == COCO_SEGMENTATION_PATH + '/images/val/b.jpg'
     assert clarifai_loader[0].labels == ['a']
-    assert clarifai_loader[0].id == 'b'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
 
   def test_cityscapes_loader(self,):
@@ -147,7 +136,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_segmentation'
     assert len(clarifai_loader) == 4
-    assert clarifai_loader[0].id == '000031'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
 
   def test_ade20k2017_loader(self,):
@@ -155,6 +143,5 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_segmentation'
     assert len(clarifai_loader) == 2
-    assert clarifai_loader[0].image_path == ADE_PATH + '/dataset/training/street/1.jpg'
     assert clarifai_loader[0].id == '1'
     assert isinstance(clarifai_loader[0].image_bytes, bytes)

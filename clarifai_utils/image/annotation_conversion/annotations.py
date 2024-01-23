@@ -4,15 +4,17 @@ from datumaro.components.dataset import Dataset
 from datumaro.components.errors import (DatasetError, DatasetImportError, DatasetNotFoundError,
                                         MultipleFormatsMatchError)
 
-from clarifai_datautils.constants.annotations import (ANNOTATION_FORMATS,
-                                                      ANNOTATION_FORMATS_TO_TASKS, FORMAT_MAP)
-from clarifai_datautils.errors import AnnotationsDatasetError, AnnotationsFormatError
-from clarifai_datautils.image.annotation_conversion.base import ClarifaiDataLoader
-from clarifai_datautils.image.annotation_conversion.clarifai_loaders import (
-    ClassificationDataLoader, DetectionDataLoader, SegmentationDataLoader)
+from clarifai_utils.constants.annotations import (IMAGE_ANNOTATION_FORMATS,
+                                                  IMAGE_ANNOTATION_FORMATS_TO_TASKS,
+                                                  IMAGE_FORMAT_MAP)
+from clarifai_utils.errors import AnnotationsDatasetError, AnnotationsFormatError
+from clarifai_utils.image.annotation_conversion.base import ClarifaiDataLoader
+from clarifai_utils.image.annotation_conversion.clarifai_loaders import (ClassificationDataLoader,
+                                                                         DetectionDataLoader,
+                                                                         SegmentationDataLoader)
 
 
-class Annotations():
+class Image_Annotations():
   """Annotaions is a class that provides image annotation utilities."""
 
   def __init__(
@@ -45,22 +47,22 @@ class Annotations():
             A dataset object.
 
         Example:
-            >>> from clarifai-utils.image import Annotations
-            >>> format = Annotations.import_from(path=folder_path, format = 'coco_detection')
+            >>> from clarifai-utils import Image_Annotations
+            >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
         """
-    if format not in ANNOTATION_FORMATS:
+    if format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError(
-          'Invalid format. Format must be one of {}'.format(ANNOTATION_FORMATS))
+          'Invalid format. Format must be one of {}'.format(IMAGE_ANNOTATION_FORMATS))
     #task of the dataset
-    task = ANNOTATION_FORMATS_TO_TASKS[format]
+    task = IMAGE_ANNOTATION_FORMATS_TO_TASKS[format]
 
     try:
-      format_name = FORMAT_MAP[format]
+      format_name = IMAGE_FORMAT_MAP[format]
       dataset = Dataset.import_from(path, format_name)
     except (DatasetError, DatasetImportError, DatasetNotFoundError) as ex:
       raise AnnotationsDatasetError(ex)
 
-    return Annotations(dataset, format, task)
+    return Image_Annotations(dataset, format, task)
 
   def get_info(self,) -> Dict[str, Any]:
     """Gets information about a dataset.
@@ -69,8 +71,8 @@ class Annotations():
             A dictionary containing the information about the dataset.
 
         Example:
-            >>> from clarifai-utils.image import Annotations
-            >>> format = Annotations.import_from(path=folder_path, format = 'coco_detection')
+            >>> from clarifai-utils import Image_Annotations
+            >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
             >>> info = format.get_info()
         """
     return {
@@ -90,15 +92,15 @@ class Annotations():
             format (str): The format of the dataset.
 
         Example:
-            >>> from clarifai-utils.image import Annotations
-            >>> format = Annotations.import_from(path=folder_path, format = 'coco_detection')
+            >>> from clarifai-utils import Image_Annotations
+            >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
             >>> format.export_to(path=output_folder_path, format = 'voc_detection')
         """
-    if format not in ANNOTATION_FORMATS:
+    if format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError('Invalid format')
 
     try:
-      format_name = FORMAT_MAP[format]
+      format_name = IMAGE_FORMAT_MAP[format]
       self._dataset.export(path, format_name)
     except Exception as ex:
       raise AnnotationsDatasetError(ex)
@@ -114,17 +116,17 @@ class Annotations():
             The format of the dataset.
 
         Example:
-            >>> from clarifai-utils.image import Annotations
-            >>> format = Annotations.detect_format(path=folder_path)
+            >>> from clarifai-utils import Image_Annotations
+            >>> format = Image_Annotations.detect_format(path=folder_path)
         """
     try:
       dataset_format = Dataset.detect(path)
     except MultipleFormatsMatchError as e:
       raise AnnotationsFormatError(e)
-    if dataset_format and dataset_format in FORMAT_MAP.values():
-      reversed_format_map = dict([(value, key) for key, value in FORMAT_MAP.items()])
+    if dataset_format and dataset_format in IMAGE_FORMAT_MAP.values():
+      reversed_format_map = dict([(value, key) for key, value in IMAGE_FORMAT_MAP.items()])
       dataset_format = reversed_format_map[dataset_format]
-    if dataset_format and dataset_format not in ANNOTATION_FORMATS:
+    if dataset_format and dataset_format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError('Given folder does not contain a supported dataset format')
     return dataset_format
 
@@ -135,8 +137,8 @@ class Annotations():
             A ClarifaiDataloader object.
 
         Example:
-            >>> from clarifai-utils.image import Annotations
-            >>> format = Annotations.import_from(path=folder_path, format = 'coco_detection')
+            >>> from clarifai-utils import Image_Annotations
+            >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
             >>> clarifai_dataset_loader = format.clarifai_loader()
         """
     if self.task == 'visual_classification':

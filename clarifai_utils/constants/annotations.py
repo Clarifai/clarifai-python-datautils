@@ -1,11 +1,11 @@
-ANNOTATION_FORMATS = [
+IMAGE_ANNOTATION_FORMATS = [
     'coco_segmentation', 'voc_detection', 'yolo', 'cifar', 'coco_detection', 'cvat', 'imagenet',
     'kitti', 'label_me', 'mnist', 'open_images', 'vgg_face2', 'lfw', 'cityscapes', 'ade20k2017'
 ]
 
-ANNOTATION_TASKS = ['visual_classification', 'visual_detection', 'visual_segmentation']
+IMAGE_ANNOTATION_TASKS = ['visual_classification', 'visual_detection', 'visual_segmentation']
 
-ANNOTATION_FORMATS_TO_TASKS = {
+IMAGE_ANNOTATION_FORMATS_TO_TASKS = {
     'imagenet': 'visual_classification',
     'cifar': 'visual_classification',
     'mnist': 'visual_classification',
@@ -23,7 +23,7 @@ ANNOTATION_FORMATS_TO_TASKS = {
     'ade20k2017': 'visual_segmentation',
 }
 
-FORMAT_MAP = {
+IMAGE_FORMAT_MAP = {
     'coco_segmentation': 'coco',
     'voc_detection': 'voc_detection',
     'yolo': 'yolo',

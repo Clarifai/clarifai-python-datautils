@@ -47,7 +47,7 @@ class Image_Annotations():
             A dataset object.
 
         Example:
-            >>> from clarifai-utils import Image_Annotations
+            >>> from clarifai_utils import Image_Annotations
             >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
         """
     if format not in IMAGE_ANNOTATION_FORMATS:
@@ -71,7 +71,7 @@ class Image_Annotations():
             A dictionary containing the information about the dataset.
 
         Example:
-            >>> from clarifai-utils import Image_Annotations
+            >>> from clarifai_utils import Image_Annotations
             >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
             >>> info = format.get_info()
         """
@@ -92,7 +92,7 @@ class Image_Annotations():
             format (str): The format of the dataset.
 
         Example:
-            >>> from clarifai-utils import Image_Annotations
+            >>> from clarifai_utils import Image_Annotations
             >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
             >>> format.export_to(path=output_folder_path, format = 'voc_detection')
         """
@@ -116,7 +116,7 @@ class Image_Annotations():
             The format of the dataset.
 
         Example:
-            >>> from clarifai-utils import Image_Annotations
+            >>> from clarifai_utils import Image_Annotations
             >>> format = Image_Annotations.detect_format(path=folder_path)
         """
     try:
@@ -137,7 +137,7 @@ class Image_Annotations():
             A ClarifaiDataloader object.
 
         Example:
-            >>> from clarifai-utils import Image_Annotations
+            >>> from clarifai_utils import Image_Annotations
             >>> format = Image_Annotations.import_from(path=folder_path, format = 'coco_detection')
             >>> clarifai_dataset_loader = format.clarifai_loader()
         """

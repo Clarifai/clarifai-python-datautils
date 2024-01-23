@@ -1,7 +1,6 @@
 import pytest
 
-from clarifai_utils import \
-    Image_Annotations  # change this to 'from clarifai-utils import Image_Annotations'
+from clarifai_utils import Image_Annotations
 from tests.utils.annotations import get_asset_path
 
 IMAGENET_PATH = get_asset_path('imagenet_dataset')

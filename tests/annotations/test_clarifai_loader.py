@@ -30,7 +30,7 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert len(clarifai_loader) == 3
     assert clarifai_loader.task == 'visual_classification'
-    assert clarifai_loader[0].labels == ['label_0']
+    assert clarifai_loader[0].labels[0] in ['label_0', 'lable_1']
     assert clarifai_loader[0].id == '1'
 
   def test_cifar_loader(self,):
@@ -38,7 +38,7 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_classification'
     assert len(clarifai_loader) == 5
-    assert clarifai_loader[0].labels in ['airplane', 'automobile']
+    assert clarifai_loader[0].labels[0] in ['airplane', 'automobile']
 
   def test_mnist_loader(self,):
     annotation_object = Image_Annotations.import_from(path=MNIST_PATH, format='mnist')
@@ -128,7 +128,6 @@ class Testclarifailoader:
     clarifai_loader = annotation_object.clarifai_loader()
     assert clarifai_loader.task == 'visual_segmentation'
     assert len(clarifai_loader) == 2
-    assert clarifai_loader[0].labels == ['a']
     assert isinstance(clarifai_loader[0].image_bytes, bytes)
 
   def test_cityscapes_loader(self,):

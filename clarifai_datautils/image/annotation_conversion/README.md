@@ -1,4 +1,4 @@
-# Annotation conversion
+# Annotation Loader
 
 A framework to load, export and analyze different annotated datasets.
 

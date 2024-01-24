@@ -54,14 +54,14 @@ annotated_dataset = ImageAnnotations.import_from(path= 'folder_path', format= 'a
 ## Features
 
 ### Image Utils
-- #### Annotation Conversion
+- #### Annotation Loader
   - Load various annotated image datasets and export to clarifai Platform
   - Convert from one annotation format to other supported annotation formats
 
 
 
 ## Usage
-### Image Annotation conversion
+### Image Annotation Loader
 ```python
 from clarifai_datautils import ImageAnnotations
 #import from folder

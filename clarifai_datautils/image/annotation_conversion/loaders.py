@@ -47,7 +47,7 @@ class ClassificationDataLoader(ClarifaiDataLoader):
       _, encoded_image = cv2.imencode('.png', dataset_item.media.data)
       image_bytes = encoded_image.tobytes()
     else:
-      image_bytes = None
+      image_bytes = dataset_item.media.bytes
 
     concept_ids = []
     annotations = dataset_item.annotations

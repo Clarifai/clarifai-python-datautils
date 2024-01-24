@@ -13,7 +13,7 @@ if install_requires and install_requires[-1] == '':
   # Remove the last empty line
   install_requires = install_requires[:-1]
 
-packages = setuptools.find_namespace_packages(include=["clarifai_datautils*"])
+packages = setuptools.find_namespace_packages(include=["clarifai_utils*"])
 
 setuptools.setup(
     name="clarifai-utils",

@@ -25,12 +25,12 @@ class ImageAnnotations():
   ):
     """Initializes an Annotaions object.
 
-      Args:
-        dataset_object (Dataset): Datumaro Dataset Object.
-        annotation_format (str): The format of the dataset.
-        task (str): The task of the dataset.
+    Args:
+      dataset_object (Dataset): Datumaro Dataset Object.
+      annotation_format (str): The format of the dataset.
+      task (str): The task of the dataset.
 
-      """
+    """
     self._dataset = dataset_object
     self.annotation_format = annotation_format
     self.task = task
@@ -39,17 +39,17 @@ class ImageAnnotations():
   def import_from(cls, path: str, format: str) -> Dataset:
     """Imports a dataset from a given path and format.
 
-        Args:
-            path (str): The path to the dataset.
-            format (str): The format of the dataset.
+    Args:
+        path (str): The path to the dataset.
+        format (str): The format of the dataset.
 
-        Returns:
-            A dataset object.
+    Returns:
+        A dataset object.
 
-        Example:
-            >>> from clarifai_utils import ImageAnnotations
-            >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
-        """
+    Example:
+        >>> from clarifai_utils import ImageAnnotations
+        >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
+    """
     if format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError(
           'Invalid format. Format must be one of {}'.format(IMAGE_ANNOTATION_FORMATS))
@@ -67,14 +67,14 @@ class ImageAnnotations():
   def get_info(self,) -> Dict[str, Any]:
     """Gets information about a dataset.
 
-        Returns:
-            A dictionary containing the information about the dataset.
+    Returns:
+        A dictionary containing the information about the dataset.
 
-        Example:
-            >>> from clarifai_utils import ImageAnnotations
-            >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
-            >>> info = format.get_info()
-        """
+    Example:
+        >>> from clarifai_utils import ImageAnnotations
+        >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
+        >>> info = format.get_info()
+    """
     return {
         'size': len(self._dataset._data),
         'source_path': self._dataset._source_path,
@@ -87,15 +87,15 @@ class ImageAnnotations():
   def export_to(self, path: str, format: str) -> None:
     """Exports a dataset to a given path and format.
 
-        Args:
-            path (str): The path to the dataset.
-            format (str): The format of the dataset.
+    Args:
+        path (str): The path to the dataset.
+        format (str): The format of the dataset.
 
-        Example:
-            >>> from clarifai_utils import ImageAnnotations
-            >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
-            >>> format.export_to(path=output_folder_path, format = 'voc_detection')
-        """
+    Example:
+        >>> from clarifai_utils import ImageAnnotations
+        >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
+        >>> format.export_to(path=output_folder_path, format = 'voc_detection')
+    """
     if format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError('Invalid format')
 
@@ -109,16 +109,16 @@ class ImageAnnotations():
   def detect_format(path: str) -> str:
     """Gets the format of a dataset.
 
-        Args:
-            path (str): The path to the dataset.
+    Args:
+        path (str): The path to the dataset.
 
-        Returns:
-            The format of the dataset.
+    Returns:
+        The format of the dataset.
 
-        Example:
-            >>> from clarifai_utils import ImageAnnotations
-            >>> format = ImageAnnotations.detect_format(path=folder_path)
-        """
+    Example:
+        >>> from clarifai_utils import ImageAnnotations
+        >>> format = ImageAnnotations.detect_format(path=folder_path)
+    """
     try:
       dataset_format = Dataset.detect(path)
     except MultipleFormatsMatchError as e:
@@ -134,14 +134,14 @@ class ImageAnnotations():
   def dataloader(self) -> ClarifaiDataLoader:
     """Returns a Clarifai Dataloader Object to pass to SDK Dataset Upload Functionality.
 
-        Returns:
-            A ClarifaiDataloader object.
+    Returns:
+        A ClarifaiDataloader object.
 
-        Example:
-            >>> from clarifai_utils import ImageAnnotations
-            >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
-            >>> clarifai_dataset_loader = format.dataloader
-        """
+    Example:
+        >>> from clarifai_utils import ImageAnnotations
+        >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
+        >>> clarifai_dataset_loader = format.dataloader
+    """
     if self.task == 'visual_classification':
       return ClassificationDataLoader(self._dataset)
     elif self.task == 'visual_detection':

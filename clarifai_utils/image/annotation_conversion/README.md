@@ -7,12 +7,12 @@ A framework to load, export and analyze different annotated datasets.
 
 ### Features
 ```python
-from clarifai_utils import Image_Annotations
+from clarifai_utils import ImageAnnotations
 #import from folder
-coco_dataset = Image_Annotations.import_from(path='folder_path',format= 'coco_detection')
+coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
 #clarifai dataset loader object
-coco_dataset.clarifai_loader()
+coco_dataset.dataloader
 
 
 #info about loaded dataset
@@ -26,14 +26,14 @@ coco_dataset.export_to('voc_detection')
 
 ### With Clarifai Python SDK
 ```python
-from clarifai_utils import Image_Annotations
-coco_dataset = Image_Annotations.import_from(path='folder_path',format= 'coco_detection')
+from clarifai_utils import ImageAnnotations
+coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
 #clarifai SDK
 #export CLARIFAI_PAT={your personal access token}  # set PAT as env variable
 from clarifai.client.dataset import Dataset
 dataset = Dataset(user_id="user_id", app_id="app_id", dataset_id="dataset_id")
-dataset.upload_dataset(dataloader=coco_dataset.clarifai_loader())
+dataset.upload_dataset(dataloader=coco_dataset.dataloader)
 
 ```
 

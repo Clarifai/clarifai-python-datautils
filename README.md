@@ -46,9 +46,9 @@ pip3 install -r requirements.txt
 Quick intro to Image Annotation Conversion feature
 
 ```python
-from clarifai_utils import Image_Annotations
+from clarifai_utils import ImageAnnotations
 
-annotated_dataset = Image_Annotations.import_from(path= 'folder_path', format= 'annotation_format')
+annotated_dataset = ImageAnnotations.import_from(path= 'folder_path', format= 'annotation_format')
 ```
 
 ## Features
@@ -63,12 +63,12 @@ annotated_dataset = Image_Annotations.import_from(path= 'folder_path', format= '
 ## Usage
 ### Image Annotation conversion
 ```python
-from clarifai_utils import Image_Annotations
+from clarifai_utils import ImageAnnotations
 #import from folder
-coco_dataset = Image_Annotations.import_from(path='folder_path',format= 'coco_detection')
+coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
 #clarifai dataset loader object
-coco_dataset.clarifai_loader()
+coco_dataset.dataloader
 
 
 #info about loaded dataset

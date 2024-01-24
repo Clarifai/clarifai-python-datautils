@@ -1,7 +1,7 @@
 from typing import TypeVar, Union
 
-from .clarifai_features import (VisualClassificationFeatures, VisualDetectionFeatures,
-                                VisualSegmentationFeatures)
+from .features import (VisualClassificationFeatures, VisualDetectionFeatures,
+                       VisualSegmentationFeatures)
 
 DATASET_UPLOAD_TASKS = ["visual_classification", "visual_detection", "visual_segmentation"]
 

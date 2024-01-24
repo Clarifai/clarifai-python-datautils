@@ -1,6 +1,6 @@
 import pytest
 
-from clarifai_utils import Image_Annotations
+from clarifai_utils import ImageAnnotations
 from tests.utils.annotations import get_asset_path
 
 IMAGENET_PATH = get_asset_path('imagenet_dataset')
@@ -24,7 +24,7 @@ ADE_PATH = get_asset_path('ade20k2017_dataset')
 
 @pytest.fixture
 def annotation_object():
-  return Image_Annotations.import_from(path=IMAGENET_PATH, format='imagenet')
+  return ImageAnnotations.import_from(path=IMAGENET_PATH, format='imagenet')
 
 
 class Testannotaionimport:
@@ -39,48 +39,48 @@ class Testannotaionimport:
     assert info['annotations_count'] == 3
 
   def test_detect_format(self,):
-    format = Image_Annotations.detect_format(path=IMAGENET_PATH)
+    format = ImageAnnotations.detect_format(path=IMAGENET_PATH)
     assert format == 'imagenet'
 
   def test_imagenet_import(self,):
-    annotation_object = Image_Annotations.import_from(path=IMAGENET_PATH, format='imagenet')
+    annotation_object = ImageAnnotations.import_from(path=IMAGENET_PATH, format='imagenet')
     assert annotation_object.annotation_format == 'imagenet'
     assert annotation_object.task == 'visual_classification'
 
   def test_cifar_import(self,):
-    annotation_object = Image_Annotations.import_from(path=CIFAR_PATH, format='cifar')
+    annotation_object = ImageAnnotations.import_from(path=CIFAR_PATH, format='cifar')
     assert annotation_object.annotation_format == 'cifar'
     assert annotation_object.task == 'visual_classification'
     assert len(annotation_object._dataset._data) == 5  # 5 images
     assert annotation_object._dataset.get_annotated_items() == 5
 
   def test_mnist_import(self,):
-    annotation_object = Image_Annotations.import_from(path=MNIST_PATH, format='mnist')
+    annotation_object = ImageAnnotations.import_from(path=MNIST_PATH, format='mnist')
     assert annotation_object.annotation_format == 'mnist'
     assert annotation_object.task == 'visual_classification'
     assert len(annotation_object._dataset._data) == 5  # 5 images
     assert annotation_object._dataset.get_annotated_items() == 5
 
   def test_vgg_face2_import(self,):
-    annotation_object = Image_Annotations.import_from(path=VGG_PATH, format='vgg_face2')
+    annotation_object = ImageAnnotations.import_from(path=VGG_PATH, format='vgg_face2')
     assert annotation_object.annotation_format == 'vgg_face2'
     assert annotation_object.task == 'visual_classification'
     assert len(annotation_object._dataset._data) == 4  # 4 images
 
   def test_lfw_import(self,):
-    annotation_object = Image_Annotations.import_from(path=LFW_PATH, format='lfw')
+    annotation_object = ImageAnnotations.import_from(path=LFW_PATH, format='lfw')
     assert annotation_object.annotation_format == 'lfw'
     assert annotation_object.task == 'visual_classification'
     assert len(annotation_object._dataset._data) == 3  # 3 images
 
   def test_voc_detection_import(self,):
-    annotation_object = Image_Annotations.import_from(path=VOC_PATH, format='voc_detection')
+    annotation_object = ImageAnnotations.import_from(path=VOC_PATH, format='voc_detection')
     assert annotation_object.annotation_format == 'voc_detection'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 1  # 1 image
 
   def test_yolo_import(self,):
-    annotation_object = Image_Annotations.import_from(path=YOLO_PATH, format='yolo')
+    annotation_object = ImageAnnotations.import_from(path=YOLO_PATH, format='yolo')
     assert annotation_object.annotation_format == 'yolo'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 1  # 1 images
@@ -88,38 +88,38 @@ class Testannotaionimport:
     assert annotation_object._dataset.get_annotations() == 2  # 2 annotations
 
   def test_coco_detection_import(self,):
-    annotation_object = Image_Annotations.import_from(
+    annotation_object = ImageAnnotations.import_from(
         path=COCO_DETECTION_PATH, format='coco_detection')
     assert annotation_object.annotation_format == 'coco_detection'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 2  # 2 images
 
   def test_cvat_import(self,):
-    annotation_object = Image_Annotations.import_from(path=CVAT_PATH, format='cvat')
+    annotation_object = ImageAnnotations.import_from(path=CVAT_PATH, format='cvat')
     assert annotation_object.annotation_format == 'cvat'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 8  # 8 images
 
   def test_kitti_import(self,):
-    annotation_object = Image_Annotations.import_from(path=KITTI_PATH, format='kitti')
+    annotation_object = ImageAnnotations.import_from(path=KITTI_PATH, format='kitti')
     assert annotation_object.annotation_format == 'kitti'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 2  # 2 images
 
   def test_label_me_import(self,):
-    annotation_object = Image_Annotations.import_from(path=LABEL_ME_PATH, format='label_me')
+    annotation_object = ImageAnnotations.import_from(path=LABEL_ME_PATH, format='label_me')
     assert annotation_object.annotation_format == 'label_me'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 1  # 1 images
 
   def test_open_images_import(self,):
-    annotation_object = Image_Annotations.import_from(path=OPEN_IMAGES_PATH, format='open_images')
+    annotation_object = ImageAnnotations.import_from(path=OPEN_IMAGES_PATH, format='open_images')
     assert annotation_object.annotation_format == 'open_images'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 2  # 2 images
 
   def test_coco_segmentation_import(self,):
-    annotation_object = Image_Annotations.import_from(
+    annotation_object = ImageAnnotations.import_from(
         path=COCO_SEGMENTATION_PATH, format='coco_segmentation')
     assert annotation_object.annotation_format == 'coco_segmentation'
     assert annotation_object.task == 'visual_segmentation'
@@ -127,14 +127,14 @@ class Testannotaionimport:
     assert annotation_object._dataset.get_annotations() == 8  # 8 annotations
 
   def test_cityscapes_import(self,):
-    annotation_object = Image_Annotations.import_from(path=CITYSCAPES_PATH, format='cityscapes')
+    annotation_object = ImageAnnotations.import_from(path=CITYSCAPES_PATH, format='cityscapes')
     assert annotation_object.annotation_format == 'cityscapes'
     assert annotation_object.task == 'visual_segmentation'
     assert len(annotation_object._dataset._data) == 4  # 4 images
     assert annotation_object._dataset.get_annotations() == 8  # 8 annotations
 
   def test_ade20k2017_import(self,):
-    annotation_object = Image_Annotations.import_from(path=ADE_PATH, format='ade20k2017')
+    annotation_object = ImageAnnotations.import_from(path=ADE_PATH, format='ade20k2017')
     assert annotation_object.annotation_format == 'ade20k2017'
     assert annotation_object.task == 'visual_segmentation'
     assert len(annotation_object._dataset._data) == 2  # 2 images

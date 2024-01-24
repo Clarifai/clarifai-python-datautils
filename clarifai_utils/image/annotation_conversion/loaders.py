@@ -7,8 +7,8 @@ from datumaro.components.annotation import AnnotationType
 from datumaro.components.media import ImageFromNumpy
 
 from .base import ClarifaiDataLoader
-from .clarifai_features import (VisualClassificationFeatures, VisualDetectionFeatures,
-                                VisualSegmentationFeatures)
+from .features import (VisualClassificationFeatures, VisualDetectionFeatures,
+                       VisualSegmentationFeatures)
 
 delimiters = [",", "|", ";", "/", "\\", ":", " "]
 

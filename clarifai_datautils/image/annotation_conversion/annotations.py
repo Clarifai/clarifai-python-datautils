@@ -4,14 +4,14 @@ from datumaro.components.dataset import Dataset
 from datumaro.components.errors import (DatasetError, DatasetImportError, DatasetNotFoundError,
                                         MultipleFormatsMatchError)
 
-from clarifai_utils.constants.annotations import (IMAGE_ANNOTATION_FORMATS,
-                                                  IMAGE_ANNOTATION_FORMATS_TO_TASKS,
-                                                  IMAGE_FORMAT_MAP)
-from clarifai_utils.errors import AnnotationsDatasetError, AnnotationsFormatError
-from clarifai_utils.image.annotation_conversion.base import ClarifaiDataLoader
-from clarifai_utils.image.annotation_conversion.loaders import (ClassificationDataLoader,
-                                                                DetectionDataLoader,
-                                                                SegmentationDataLoader)
+from clarifai_datautils.constants.annotations import (IMAGE_ANNOTATION_FORMATS,
+                                                      IMAGE_ANNOTATION_FORMATS_TO_TASKS,
+                                                      IMAGE_FORMAT_MAP)
+from clarifai_datautils.errors import AnnotationsDatasetError, AnnotationsFormatError
+from clarifai_datautils.image.annotation_conversion.base import ClarifaiDataLoader
+from clarifai_datautils.image.annotation_conversion.loaders import (ClassificationDataLoader,
+                                                                    DetectionDataLoader,
+                                                                    SegmentationDataLoader)
 
 
 class ImageAnnotations():
@@ -47,7 +47,7 @@ class ImageAnnotations():
         A dataset object.
 
     Example:
-        >>> from clarifai_utils import ImageAnnotations
+        >>> from clarifai_datautils import ImageAnnotations
         >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
     """
     if format not in IMAGE_ANNOTATION_FORMATS:
@@ -71,7 +71,7 @@ class ImageAnnotations():
         A dictionary containing the information about the dataset.
 
     Example:
-        >>> from clarifai_utils import ImageAnnotations
+        >>> from clarifai_datautils import ImageAnnotations
         >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
         >>> info = format.get_info()
     """
@@ -92,7 +92,7 @@ class ImageAnnotations():
         format (str): The format of the dataset.
 
     Example:
-        >>> from clarifai_utils import ImageAnnotations
+        >>> from clarifai_datautils import ImageAnnotations
         >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
         >>> format.export_to(path=output_folder_path, format = 'voc_detection')
     """
@@ -116,7 +116,7 @@ class ImageAnnotations():
         The format of the dataset.
 
     Example:
-        >>> from clarifai_utils import ImageAnnotations
+        >>> from clarifai_datautils import ImageAnnotations
         >>> format = ImageAnnotations.detect_format(path=folder_path)
     """
     try:
@@ -138,7 +138,7 @@ class ImageAnnotations():
         A ClarifaiDataloader object.
 
     Example:
-        >>> from clarifai_utils import ImageAnnotations
+        >>> from clarifai_datautils import ImageAnnotations
         >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
         >>> clarifai_dataset_loader = format.dataloader
     """

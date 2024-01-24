@@ -7,7 +7,7 @@ A framework to load, export and analyze different annotated datasets.
 
 ### Features
 ```python
-from clarifai_utils import ImageAnnotations
+from clarifai_datautils import ImageAnnotations
 #import from folder
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
@@ -26,7 +26,7 @@ coco_dataset.export_to('voc_detection')
 
 ### With Clarifai Python SDK
 ```python
-from clarifai_utils import ImageAnnotations
+from clarifai_datautils import ImageAnnotations
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
 #clarifai SDK

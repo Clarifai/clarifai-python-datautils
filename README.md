@@ -4,7 +4,7 @@
 
 
 [![Discord](https://img.shields.io/discord/1145701543228735582)](https://discord.gg/M32V7a7a)
-[![codecov](https://img.shields.io/pypi/dm/clarifai)](https://pypi.org/project/clarifai)
+[![codecov](https://img.shields.io/pypi/dm/clarifai)](https://pypi.org/project/clarifai-datautils)
 
 This is a collection of utilities for handling various types of multimedia data. Enhance your experience by seamlessly integrating these utilities with the Clarifai Python SDK. This powerful combination empowers you to address both visual and textual use cases effortlessly through the capabilities of Artificial Intelligence. Unlock new possibilities and elevate your projects with the synergy of versatile data utilities and the robust features offered by the [Clarifai Python SDK](https://github.com/Clarifai/clarifai-python). Explore the fusion of these tools to amplify the intelligence in your applications! 🌐🚀
 

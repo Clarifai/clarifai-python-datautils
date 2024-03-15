@@ -12,6 +12,7 @@ from clarifai_datautils.image.annotation_conversion.base import ClarifaiDataLoad
 from clarifai_datautils.image.annotation_conversion.loaders import (ClassificationDataLoader,
                                                                     DetectionDataLoader,
                                                                     SegmentationDataLoader)
+from clarifai_datautils.image.annotation_conversion.utils import Clarifai_to_Datumaro
 
 
 class ImageAnnotations():
@@ -56,11 +57,15 @@ class ImageAnnotations():
     #task of the dataset
     task = IMAGE_ANNOTATION_FORMATS_TO_TASKS[format]
 
-    try:
-      format_name = IMAGE_FORMAT_MAP[format]
-      dataset = Dataset.import_from(path, format_name)
-    except (DatasetError, DatasetImportError, DatasetNotFoundError) as ex:
-      raise AnnotationsDatasetError(ex)
+    #import dataset
+    if format == 'clarifai':
+      dataset = Clarifai_to_Datumaro(path).convert()
+    else:
+      try:
+        format_name = IMAGE_FORMAT_MAP[format]
+        dataset = Dataset.import_from(path, format_name)
+      except (DatasetError, DatasetImportError, DatasetNotFoundError) as ex:
+        raise AnnotationsDatasetError(ex)
 
     return ImageAnnotations(dataset, format, task)
 
@@ -84,12 +89,13 @@ class ImageAnnotations():
         'categories': list(self._dataset.get_categories_info())
     }
 
-  def export_to(self, path: str, format: str) -> None:
+  def export_to(self, path: str, format: str, save_images: bool = False) -> None:
     """Exports a dataset to a given path and format.
 
     Args:
         path (str): The path to the dataset.
         format (str): The format of the dataset.
+        save_images (bool): Whether to save the images or not.
 
     Example:
         >>> from clarifai_datautils import ImageAnnotations
@@ -99,9 +105,13 @@ class ImageAnnotations():
     if format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError('Invalid format')
 
+    if format == 'clarifai':
+      raise AnnotationsFormatError(
+          'Cannot export to clarifai format. Use clarifai SDK to upload the dataset.')
+
     try:
       format_name = IMAGE_FORMAT_MAP[format]
-      self._dataset.export(path, format_name)
+      self._dataset.export(path, format_name, save_media=save_images)
     except Exception as ex:
       raise AnnotationsDatasetError(ex)
 
@@ -129,6 +139,19 @@ class ImageAnnotations():
     if dataset_format and dataset_format not in IMAGE_ANNOTATION_FORMATS:
       raise AnnotationsFormatError('Given folder does not contain a supported dataset format')
     return dataset_format
+
+  @staticmethod
+  def list_formats() -> list:
+    """Lists the supported formats.
+
+    Returns:
+        A list of supported formats.
+
+    Example:
+        >>> from clarifai_datautils import ImageAnnotations
+        >>> ImageAnnotations.list_formats()
+    """
+    return IMAGE_ANNOTATION_FORMATS
 
   @property
   def dataloader(self) -> ClarifaiDataLoader:

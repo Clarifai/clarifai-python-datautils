@@ -1,6 +1,7 @@
 IMAGE_ANNOTATION_FORMATS = [
     'coco_segmentation', 'voc_detection', 'yolo', 'cifar', 'coco_detection', 'cvat', 'imagenet',
-    'kitti', 'label_me', 'mnist', 'open_images', 'vgg_face2', 'lfw', 'cityscapes', 'ade20k2017'
+    'kitti', 'label_me', 'mnist', 'open_images', 'vgg_face2', 'lfw', 'cityscapes', 'ade20k2017',
+    'clarifai'
 ]
 
 IMAGE_ANNOTATION_TASKS = ['visual_classification', 'visual_detection', 'visual_segmentation']
@@ -11,6 +12,7 @@ IMAGE_ANNOTATION_FORMATS_TO_TASKS = {
     'mnist': 'visual_classification',
     'vgg_face2': 'visual_classification',
     'lfw': 'visual_classification',
+    'clarifai': 'visual_detection',
     'voc_detection': 'visual_detection',
     'yolo': 'visual_detection',
     'coco_detection': 'visual_detection',

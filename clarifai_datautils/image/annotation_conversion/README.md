@@ -11,9 +11,6 @@ from clarifai_datautils import ImageAnnotations
 #import from folder
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
-#clarifai dataset loader object
-coco_dataset.dataloader
-
 
 #info about loaded dataset
 coco_dataset.get_info()
@@ -24,7 +21,7 @@ coco_dataset.export_to('voc_detection')
 ```
 
 
-### With Clarifai Python SDK
+### Upload using Clarifai Python SDK
 ```python
 from clarifai_datautils import ImageAnnotations
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
@@ -37,6 +34,24 @@ dataset.upload_dataset(dataloader=coco_dataset.dataloader)
 
 ```
 
+
+### Export to other formats from Clarifai Platform
+```python
+
+#clarifai SDK
+#export CLARIFAI_PAT={your personal access token}  # set PAT as env variable
+from clarifai.client.dataset import Dataset
+dataset = Dataset(user_id="user_id", app_id="app_id", dataset_id="dataset_id")
+dataset.export(save_path='output.zip',split='train')
+
+#Extract the zip file and pass the folder to ImageAnnotations
+from clarifai_datautils import ImageAnnotations
+clarifai_dataset = ImageAnnotations.import_from(path='folder_path',format= 'clarifai')
+
+#export to other formats
+clarifai_dataset.export_to(path='output_path',format='coco_detection',save_images=True)
+
+```
 
 ## Supported Formats
 
@@ -54,6 +69,7 @@ dataset.upload_dataset(dataloader=coco_dataset.dataloader)
 | [Kitti](http://www.cvlibs.net/datasets/kitti/index.php)                                          | kitti     | detection  |
 | [LabelMe](http://labelme.csail.mit.edu/Release3.0)                                               | label_me     | detection  |
 | [Open Images](https://storage.googleapis.com/openimages/web/download.html)                       | open_images     | detection  |
+| [Clarifai](https://github.com/Clarifai/examples/tree/main/Data_Utils)                       | clarifai     | detection  |
 | [COCO(segmentation)](http://cocodataset.org/#format-data)                                     | coco_segmentation     | segmentation  |
 | [Cityscapes](https://www.cityscapes-dataset.com/)                                                | cityscapes     | segmentation  |
 | [ADE](https://www.cityscapes-dataset.com/)                                                       | ade20k2017     | segmentation  |

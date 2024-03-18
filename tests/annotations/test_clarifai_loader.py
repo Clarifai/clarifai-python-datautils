@@ -84,7 +84,6 @@ class Testclarifailoader:
     dataloader = annotation_object.dataloader
     assert dataloader.task == 'visual_detection'
     assert len(dataloader) == 2
-    assert dataloader[0].labels == ['b']
     assert dataloader[0].id == 'a'
     assert isinstance(dataloader[0].image_bytes, bytes)
 

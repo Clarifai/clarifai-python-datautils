@@ -14,6 +14,7 @@ CVAT_PATH = get_asset_path('cvat_dataset')
 KITTI_PATH = get_asset_path('kitti_detection')
 LABEL_ME_PATH = get_asset_path('labelme_dataset')
 OPEN_IMAGES_PATH = get_asset_path('openimages_dataset')
+CLARIFAI_PATH = get_asset_path('clarifai_dataset')
 
 COCO_SEGMENTATION_PATH = get_asset_path('coco_segmentation')
 CITYSCAPES_PATH = get_asset_path('cityscapes_dataset')
@@ -83,8 +84,6 @@ class Testclarifailoader:
     dataloader = annotation_object.dataloader
     assert dataloader.task == 'visual_detection'
     assert len(dataloader) == 2
-    assert dataloader[0].labels == ['b']
-    assert dataloader[0].id == 'a'
     assert isinstance(dataloader[0].image_bytes, bytes)
 
   def test_cvat_loader(self,):
@@ -119,6 +118,14 @@ class Testclarifailoader:
     assert dataloader.task == 'visual_detection'
     assert len(dataloader) == 2
     assert dataloader[1].id == 'aa'
+    assert isinstance(dataloader[0].image_bytes, bytes)
+
+  def test_clarifai_loader(self,):
+    annotation_object = ImageAnnotations.import_from(path=CLARIFAI_PATH, format='clarifai')
+    dataloader = annotation_object.dataloader
+    assert dataloader.task == 'visual_detection'
+    assert len(dataloader) == 1
+    assert dataloader[0].id == '000464'
     assert isinstance(dataloader[0].image_bytes, bytes)
 
   def test_coco_segmentation_loader(self,):

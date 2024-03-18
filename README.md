@@ -67,9 +67,11 @@ from clarifai_datautils import ImageAnnotations
 #import from folder
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
-#clarifai dataset loader object
-coco_dataset.dataloader
-
+#Using clarifai SDK to upload to Clarifai Platform
+#export CLARIFAI_PAT={your personal access token}  # set PAT as env variable
+from clarifai.client.dataset import Dataset
+dataset = Dataset(user_id="user_id", app_id="app_id", dataset_id="dataset_id")
+dataset.upload_dataset(dataloader=coco_dataset.dataloader)
 
 #info about loaded dataset
 coco_dataset.get_info()

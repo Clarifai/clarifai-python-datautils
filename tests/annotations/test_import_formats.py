@@ -16,6 +16,7 @@ CVAT_PATH = get_asset_path('cvat_dataset')
 KITTI_PATH = get_asset_path('kitti_detection')
 LABEL_ME_PATH = get_asset_path('labelme_dataset')
 OPEN_IMAGES_PATH = get_asset_path('openimages_dataset')
+CLARIFAI_PATH = get_asset_path('clarifai_dataset')
 
 COCO_SEGMENTATION_PATH = get_asset_path('coco_segmentation')
 CITYSCAPES_PATH = get_asset_path('cityscapes_dataset')
@@ -117,6 +118,13 @@ class Testannotaionimport:
     assert annotation_object.annotation_format == 'open_images'
     assert annotation_object.task == 'visual_detection'
     assert len(annotation_object._dataset._data) == 2  # 2 images
+
+  def test_clarifai_import(self,):
+    annotation_object = ImageAnnotations.import_from(path=CLARIFAI_PATH, format='clarifai')
+    assert annotation_object.annotation_format == 'clarifai'
+    assert annotation_object.task == 'visual_detection'
+    assert len(annotation_object._dataset._data) == 1  # 1 images
+    assert annotation_object._dataset.get_annotations() == 2  # 2 annotations
 
   def test_coco_segmentation_import(self,):
     annotation_object = ImageAnnotations.import_from(

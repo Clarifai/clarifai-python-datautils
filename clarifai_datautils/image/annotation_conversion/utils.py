@@ -71,11 +71,10 @@ class Clarifai_to_Datumaro():
     return DatasetItem(id=image_path.split('.png')[0], media=image_data, annotations=annotations)
 
   def clarifai_bbox_to_datumaro_bbox(self, clarifai_bbox, width, height) -> Tuple[int]:
-    left_col = clarifai_bbox['leftCol'] * width
-    top_row = clarifai_bbox['topRow'] * height
-    right_col = clarifai_bbox['rightCol'] * width
-    bottom_row = clarifai_bbox['bottomRow'] * height
-
+    left_col = clarifai_bbox['leftCol'] * width if 'leftCol' in clarifai_bbox.keys() else 0
+    top_row = clarifai_bbox['topRow'] * height if 'topRow' in clarifai_bbox.keys() else 0
+    right_col = clarifai_bbox['rightCol'] * width if 'rightCol' in clarifai_bbox.keys() else 0
+    bottom_row = clarifai_bbox['bottomRow'] * height if 'bottomRow' in clarifai_bbox.keys() else 0
     obj_box = (left_col, top_row, right_col - left_col, bottom_row - top_row)
     return obj_box
 

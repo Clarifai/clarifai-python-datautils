@@ -199,7 +199,7 @@ class ExtractTextAfter(BaseTransform):
       try:
         metadata = {self.key: extract_text_after(element.text, self.string)}
         element.metadata.update(ElementMetadata.from_dict(metadata))
-      except:
+      except Exception:
         pass
     return elements
 
@@ -232,6 +232,6 @@ class ExtractTextBefore(BaseTransform):
       try:
         metadata = {self.key: extract_text_before(element.text, self.string)}
         element.metadata.update(ElementMetadata.from_dict(metadata))
-      except:
+      except Exception:
         pass
     return elements

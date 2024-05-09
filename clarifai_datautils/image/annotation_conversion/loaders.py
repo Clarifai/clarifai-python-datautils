@@ -8,7 +8,7 @@ from datumaro.components.media import ImageFromNumpy
 
 from ...base import ClarifaiDataLoader
 from ...base.features import (VisualClassificationFeatures, VisualDetectionFeatures,
-                       VisualSegmentationFeatures)
+                              VisualSegmentationFeatures)
 
 delimiters = [",", "|", ";", "/", "\\", ":", " "]
 

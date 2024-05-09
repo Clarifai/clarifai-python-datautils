@@ -1,8 +1,9 @@
 import os
 from typing import List
-from .loaders import TextDataLoader
+
 from tqdm import tqdm
 
+from .loaders import TextDataLoader
 
 
 class BaseTransform:
@@ -21,7 +22,7 @@ class Pipeline:
 
   def __init__(
       self,
-      name :str,
+      name: str,
       transformations: List,
   ):
     """Initializes an Pipeline object.
@@ -35,11 +36,15 @@ class Pipeline:
     self.transformations = transformations
     for transform in self.transformations:
       if not isinstance(transform, BaseTransform):
-         raise ValueError('All transformations should be of type BaseTransform.')
+        raise ValueError('All transformations should be of type BaseTransform.')
 
     #TODO: Schema for transformations
 
-  def run(self, files: str = None, folder: str = None, show_progress: bool = True, loader: bool = True):
+  def run(self,
+          files: str = None,
+          folder: str = None,
+          show_progress: bool = True,
+          loader: bool = True):
     """Runs the Data Ingestion pipeline.
 
     Args:
@@ -70,16 +75,16 @@ class Pipeline:
     # Apply transformations
     #TODO: num_workers support
     if show_progress:
-        with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
-            for transform in self.transformations:
-                self.elements = transform(self.elements)
-                progress.update()
-    else:
+      with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
         for transform in self.transformations:
-            self.elements = transform(self.elements)
+          self.elements = transform(self.elements)
+          progress.update()
+    else:
+      for transform in self.transformations:
+        self.elements = transform(self.elements)
 
-    if loader == True:
-      return TextDataLoader(self.elements, pipeline_name = self.name)
+    if loader is True:
+      return TextDataLoader(self.elements, pipeline_name=self.name)
 
     return self.elements
 
@@ -100,7 +105,6 @@ class Pipeline:
     pass
 
   def __str__(self) -> str:
-    separator = "\t"
     return (f"Pipeline: {self.name}\n"
             f"\tsize={len(self.transformations)}\n"
             f"\ttransformations={self.transformations}\n")

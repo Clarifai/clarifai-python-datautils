@@ -8,7 +8,7 @@ from clarifai_datautils.constants.annotations import (IMAGE_ANNOTATION_FORMATS,
                                                       IMAGE_ANNOTATION_FORMATS_TO_TASKS,
                                                       IMAGE_FORMAT_MAP)
 from clarifai_datautils.errors import AnnotationsDatasetError, AnnotationsFormatError
-from clarifai_datautils.image.annotation_conversion.base import ClarifaiDataLoader
+from clarifai_datautils.base import ClarifaiDataLoader
 from clarifai_datautils.image.annotation_conversion.loaders import (ClassificationDataLoader,
                                                                     DetectionDataLoader,
                                                                     SegmentationDataLoader)

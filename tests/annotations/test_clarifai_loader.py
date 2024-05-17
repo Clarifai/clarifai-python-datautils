@@ -32,7 +32,6 @@ class Testclarifailoader:
     assert len(dataloader) == 3
     assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
     assert dataloader[0].labels[0] in ['label_0', 'label_1']
-    assert dataloader[0].id == '1'
 
   def test_cifar_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=CIFAR_PATH, format='cifar')

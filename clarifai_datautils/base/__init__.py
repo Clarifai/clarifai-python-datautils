@@ -1,11 +1,9 @@
 from typing import TypeVar, Union
 
+from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
+
 from .features import (TextFeatures, VisualClassificationFeatures, VisualDetectionFeatures,
                        VisualSegmentationFeatures)
-
-DATASET_UPLOAD_TASKS = [
-    "visual_classification", "visual_detection", "visual_segmentation", "text_classification"
-]
 
 OutputFeaturesType = TypeVar(
     'OutputFeaturesType',

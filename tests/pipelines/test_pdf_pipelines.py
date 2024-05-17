@@ -8,13 +8,10 @@ PDF_FILE_PATH = osp.abspath(osp.join(osp.dirname(__file__), "assets", "DA-1p.pdf
 
 
 class TestPDFPipelines:
-  """Tests for pipeline transformations.
-  """
+  """Tests for pipeline transformations."""
 
   def test_pipeline(self,):
-    """Tests for pipeline
-    """
-
+    """Tests for pipeline"""
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
@@ -25,8 +22,7 @@ class TestPDFPipelines:
     assert len(pipeline.transformations) == 2
 
   def test_pipeline_run(self,):
-    """Tests for pipeline run
-      """
+    """Tests for pipeline run"""
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
@@ -42,8 +38,7 @@ class TestPDFPipelines:
     assert elements[0].metadata['text_after'] == 'our assault."'
 
   def test_pipeline_run_chunker(self,):
-    """Tests for pipeline run with chunker
-    """
+    """Tests for pipeline run with chunker"""
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
@@ -57,8 +52,7 @@ class TestPDFPipelines:
     assert elements[0].metadata['page_number'] == 1
 
   def test_pipeline_run_chunker_overlap(self,):
-    """Tests for pipeline run with chunker overlap
-    """
+    """Tests for pipeline run with chunker overlap"""
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[

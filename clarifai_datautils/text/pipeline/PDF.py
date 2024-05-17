@@ -19,14 +19,15 @@ class PDFPartition(BaseTransform):
                **kwargs):
     """Initializes an PDFPartition object.
 
-        Args:
-            ocr (bool): Whether to use OCR.
-            chunking_strategy (str): Chunking strategy to use.
-            max_characters (int): Maximum number of characters in a chunk.
-            overlap (int): Number of characters to overlap between chunks.
-            overlap_all (bool): Whether to overlap all chunks.
-            kwargs: Additional keyword arguments.
-        """
+    Args:
+        ocr (bool): Whether to use OCR.
+        chunking_strategy (str): Chunking strategy to use.
+        max_characters (int): Maximum number of characters in a chunk.
+        overlap (int): Number of characters to overlap between chunks.
+        overlap_all (bool): Whether to overlap all chunks.
+        kwargs: Additional keyword arguments.
+
+    """
     if chunking_strategy not in ["basic", "by_title"]:
       raise ValueError("chunking_strategy should be either 'basic' or 'by_title'.")
     self.chunking_strategy = chunking_strategy
@@ -39,13 +40,13 @@ class PDFPartition(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     file_elements = []
     for filename in elements:
       file_element = partition_pdf(

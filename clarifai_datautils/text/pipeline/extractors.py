@@ -12,18 +12,18 @@ from clarifai_datautils.constants.pipeline import MAX_NODES, SKIP_NODES
 from .base import BaseTransform
 
 
-class llamaindexwrapper(BaseTransform):
+class LlamaIndexWrapper(BaseTransform):
   """ Wrapper class for LlamaIndex Extractor object. """
 
   def __init__(self, llama_extractor, max_nodes=MAX_NODES, skip_nodes=SKIP_NODES):
     """Initializes an LlamaIndexWrapper object.
 
-        Args:
-            llama_extractor (LlamaIndexExtractor): LlamaIndex Extractor object.
-            max_nodes (int): Maximum number of nodes to extract.
-            skip_nodes (int): Every nth node to extract.
+    Args:
+        llama_extractor (LlamaIndexExtractor): LlamaIndex Extractor object.
+        max_nodes (int): Maximum number of nodes to extract.
+        skip_nodes (int): Every nth node to extract.
 
-        """
+    """
     self.max_nodes = max_nodes
     self.skip_nodes = skip_nodes
     self.llama_extractor = llama_extractor
@@ -34,13 +34,13 @@ class llamaindexwrapper(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     node_counter = 0
     for index, element in enumerate(elements):
       if node_counter == self.max_nodes:
@@ -66,13 +66,13 @@ class ExtractDateTimeTz(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       metadata = {'date_time': extract_datetimetz(element.text)}
       element.metadata.update(ElementMetadata.from_dict(metadata))
@@ -89,13 +89,13 @@ class ExtractEmailAddress(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       metadata = {'email_address': extract_email_address(element.text)}
       element.metadata.update(ElementMetadata.from_dict(metadata))
@@ -112,13 +112,13 @@ class ExtractIpAddress(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       metadata = {'ip_address': extract_ip_address(element.text)}
       element.metadata.update(ElementMetadata.from_dict(metadata))
@@ -135,13 +135,13 @@ class ExtractIpAddressName(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       metadata = {'ip_address_name': extract_ip_address_name(element.text)}
       element.metadata.update(ElementMetadata.from_dict(metadata))
@@ -158,13 +158,13 @@ class ExtractOrderedBullets(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       metadata = {'ordered_bullets': extract_ordered_bullets(element.text)}
       element.metadata.update(ElementMetadata.from_dict(metadata))
@@ -177,24 +177,24 @@ class ExtractTextAfter(BaseTransform):
   def __init__(self, key: str, string: str):
     """Initializes an ExtractTextAfter object.
 
-        Args:
-            key (str): Key to store the extracted text.
-            string (str): String to extract text after.
+    Args:
+        key (str): Key to store the extracted text.
+        string (str): String to extract text after.
 
-        """
+    """
     self.key = key
     self.string = string
 
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       try:
         metadata = {self.key: extract_text_after(element.text, self.string)}
@@ -210,24 +210,24 @@ class ExtractTextBefore(BaseTransform):
   def __init__(self, key: str, string: str):
     """Initializes an ExtractTextBefore object.
 
-        Args:
-            key (str): Key to store the extracted text.
-            string (str): String to extract text before.
+    Args:
+        key (str): Key to store the extracted text.
+        string (str): String to extract text before.
 
-        """
+    """
     self.key = key
     self.string = string
 
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       try:
         metadata = {self.key: extract_text_before(element.text, self.string)}

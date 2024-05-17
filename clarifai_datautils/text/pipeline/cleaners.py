@@ -18,13 +18,13 @@ class Clean_extra_whitespace(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_extra_whitespace(element.text)
     return elements
@@ -39,13 +39,13 @@ class Replace_unicode_quotes(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = replace_unicode_quotes(element.text)
     return elements
@@ -60,13 +60,13 @@ class Clean_dashes(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_dashes(element.text)
     return elements
@@ -81,13 +81,13 @@ class Clean_bullets(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_bullets(element.text)
     return elements
@@ -102,13 +102,13 @@ class Group_broken_paragraphs(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = group_broken_paragraphs(element.text)
     return elements
@@ -123,13 +123,13 @@ class Remove_punctuation(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = remove_punctuation(element.text)
     return elements
@@ -144,13 +144,13 @@ class Bytes_string_to_string(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = bytes_string_to_string(element.text)
     return elements
@@ -165,13 +165,13 @@ class Clean_non_ascii_chars(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_non_ascii_chars(element.text)
     return elements
@@ -186,13 +186,13 @@ class Clean_ordered_bullets(BaseTransform):
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_ordered_bullets(element.text)
     return elements
@@ -201,12 +201,7 @@ class Clean_ordered_bullets(BaseTransform):
 class Clean_prefix(BaseTransform):
 
   def __init__(self, pattern: str, ignore_case: bool = False, strip: bool = True):
-    """Initializes an clean_prefix object."""
-    self.pattern = pattern
-    self.ignore_case = ignore_case
-    self.strip = strip
-
-  """Removes the prefix from the text.
+    """Initializes an clean_prefix object.
 
     Args:
         pattern (str): The pattern for the prefix. Can be a simple string or a regex pattern.
@@ -214,17 +209,20 @@ class Clean_prefix(BaseTransform):
         strip (bool): If True, removes leading whitespace from the cleaned string.
 
     """
+    self.pattern = pattern
+    self.ignore_case = ignore_case
+    self.strip = strip
 
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_prefix(
           element.text, pattern=self.pattern, ignore_case=self.ignore_case, strip=self.strip)
@@ -234,12 +232,7 @@ class Clean_prefix(BaseTransform):
 class Clean_postfix(BaseTransform):
 
   def __init__(self, pattern: str, ignore_case: bool = False, strip: bool = True):
-    """Initializes an clean_postfix object."""
-    self.pattern = pattern
-    self.ignore_case = ignore_case
-    self.strip = strip
-
-  """Removes the postfix from the text.
+    """Removes the postfix from the text.
 
     Args:
         pattern (str): The pattern for the postfix. Can be a simple string or a regex pattern.
@@ -247,17 +240,20 @@ class Clean_postfix(BaseTransform):
         strip (bool): If True, removes leading whitespace from the cleaned string.
 
     """
+    self.pattern = pattern
+    self.ignore_case = ignore_case
+    self.strip = strip
 
   def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
-        Args:
-            elements (List[str]): List of text elements.
+    Args:
+        elements (List[str]): List of text elements.
 
-        Returns:
-            List of transformed text elements.
+    Returns:
+        List of transformed text elements.
 
-        """
+    """
     for element in elements:
       element.text = clean_postfix(
           element.text, pattern=self.pattern, ignore_case=self.ignore_case, strip=self.strip)

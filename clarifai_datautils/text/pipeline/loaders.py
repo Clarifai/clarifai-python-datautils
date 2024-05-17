@@ -1,3 +1,5 @@
+from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
+
 from ...base import ClarifaiDataLoader
 from ...base.features import TextFeatures
 
@@ -15,7 +17,7 @@ class TextDataLoader(ClarifaiDataLoader):
 
   @property
   def task(self):
-    return "text_classification"  #TODO: Better dataset name in SDK
+    return DATASET_UPLOAD_TASKS.TEXT_CLASSIFICATION  #TODO: Better dataset name in SDK
 
   def __getitem__(self, index: int):
     return TextFeatures(

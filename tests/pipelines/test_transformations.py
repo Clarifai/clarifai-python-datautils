@@ -12,8 +12,7 @@ from clarifai_datautils.text.pipeline.extractors import (
 
 
 class TestPipelineTransformations:
-  """Tests for pipeline transformations.
-  """
+  """Tests for pipeline transformations."""
 
   def test_extractors_email(self,):
     extractor = ExtractEmailAddress()

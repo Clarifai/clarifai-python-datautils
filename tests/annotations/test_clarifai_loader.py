@@ -1,4 +1,5 @@
 from clarifai_datautils import ImageAnnotations
+from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
 from tests.utils.annotations import get_asset_path
 
 IMAGENET_PATH = get_asset_path('imagenet_dataset')
@@ -29,33 +30,33 @@ class Testclarifailoader:
     annotation_object = ImageAnnotations.import_from(path=IMAGENET_PATH, format='imagenet')
     dataloader = annotation_object.dataloader
     assert len(dataloader) == 3
-    assert dataloader.task == 'visual_classification'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
     assert dataloader[0].labels[0] in ['label_0', 'label_1']
     assert dataloader[0].id == '1'
 
   def test_cifar_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=CIFAR_PATH, format='cifar')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_classification'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
     assert len(dataloader) == 5
     assert dataloader[0].labels[0] in ['airplane', 'automobile']
 
   def test_mnist_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=MNIST_PATH, format='mnist')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_classification'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
     assert len(dataloader) == 5
 
   def test_vgg_face2_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=VGG_PATH, format='vgg_face2')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_classification'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
     assert len(dataloader) == 4
 
   def test_lfw_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=LFW_PATH, format='lfw')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_classification'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
     assert len(dataloader) == 3
     assert dataloader[0].labels == ['name1']
     assert dataloader[0].id == '0001'
@@ -63,7 +64,7 @@ class Testclarifailoader:
   def test_voc_detection_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=VOC_PATH, format='voc_detection')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 1
     assert dataloader[0].labels == ['cat']
     assert dataloader[0].id == '000001'
@@ -72,7 +73,7 @@ class Testclarifailoader:
   def test_yolo_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=YOLO_PATH, format='yolo')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 1
     assert dataloader[0].labels == ['label_2', 'label_4']
     assert dataloader[0].id == '1'
@@ -82,14 +83,14 @@ class Testclarifailoader:
     annotation_object = ImageAnnotations.import_from(
         path=COCO_DETECTION_PATH, format='coco_detection')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 2
     assert isinstance(dataloader[0].image_bytes, bytes)
 
   def test_cvat_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=CVAT_PATH, format='cvat')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 8
     assert dataloader[0].labels == ['label1']
     assert isinstance(dataloader[0].image_bytes, bytes)
@@ -97,7 +98,7 @@ class Testclarifailoader:
   def test_kitti_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=KITTI_PATH, format='kitti')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 2
     assert dataloader[0].labels == ['truck', 'van']
     assert dataloader[0].id == '10'
@@ -106,7 +107,7 @@ class Testclarifailoader:
   def test_label_me_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=LABEL_ME_PATH, format='label_me')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 1
     assert dataloader[0].labels == ['b1']
     assert dataloader[0].id == 'img1'
@@ -115,7 +116,7 @@ class Testclarifailoader:
   def test_open_images_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=OPEN_IMAGES_PATH, format='open_images')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 2
     assert dataloader[1].id == 'aa'
     assert isinstance(dataloader[0].image_bytes, bytes)
@@ -123,7 +124,7 @@ class Testclarifailoader:
   def test_clarifai_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=CLARIFAI_PATH, format='clarifai')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_detection'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION
     assert len(dataloader) == 1
     assert dataloader[0].id == '000464'
     assert isinstance(dataloader[0].image_bytes, bytes)
@@ -132,21 +133,21 @@ class Testclarifailoader:
     annotation_object = ImageAnnotations.import_from(
         path=COCO_SEGMENTATION_PATH, format='coco_segmentation')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_segmentation'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_SEGMENTATION
     assert len(dataloader) == 2
     assert isinstance(dataloader[0].image_bytes, bytes)
 
   def test_cityscapes_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=CITYSCAPES_PATH, format='cityscapes')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_segmentation'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_SEGMENTATION
     assert len(dataloader) == 4
     assert isinstance(dataloader[0].image_bytes, bytes)
 
   def test_ade20k2017_loader(self,):
     annotation_object = ImageAnnotations.import_from(path=ADE_PATH, format='ade20k2017')
     dataloader = annotation_object.dataloader
-    assert dataloader.task == 'visual_segmentation'
+    assert dataloader.task == DATASET_UPLOAD_TASKS.VISUAL_SEGMENTATION
     assert len(dataloader) == 2
     assert dataloader[0].id == '1'
     assert isinstance(dataloader[0].image_bytes, bytes)

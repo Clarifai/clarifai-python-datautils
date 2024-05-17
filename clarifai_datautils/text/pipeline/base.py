@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Type
 
 from tqdm import tqdm
 
@@ -23,7 +23,7 @@ class Pipeline:
   def __init__(
       self,
       name: str,
-      transformations: List,
+      transformations: List[Type[BaseTransform]],
   ):
     """Initializes an Pipeline object.
 
@@ -57,7 +57,7 @@ class Pipeline:
         List of transformed elements or ClarifaiDataLoader object.
 
     Example:
-        >>> from clarifai-datautils.text import Pipeline
+        >>> from clarifai_datautils.text import Pipeline
         >>> dataloader = Pipeline().run(files = 'xx.pdf', loader = True))
     """
     if files is None and folder is None:
@@ -99,8 +99,7 @@ class Pipeline:
     pass
 
   def save(self,) -> None:
-    """Saves the pipeline to a yaml file.
-    """
+    """Saves the pipeline to a yaml file."""
     #TODO: Implement this
     pass
 

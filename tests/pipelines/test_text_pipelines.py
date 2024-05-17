@@ -1,6 +1,6 @@
 import os.path as osp
 
-from clarifai_datautils.text import Pipeline, Text_Partition
+from clarifai_datautils.text import Pipeline, TextPartition
 from clarifai_datautils.text.pipeline.cleaners import Clean_extra_whitespace
 from clarifai_datautils.text.pipeline.extractors import ExtractTextAfter
 
@@ -9,8 +9,7 @@ TEXT_FILE_PATH = osp.abspath(
 
 
 class TestPDFPipelines:
-  """Tests for pipeline transformations.
-  """
+  """Tests for pipeline transformations."""
 
   def test_pipeline(self,):
     """Tests for pipeline
@@ -19,19 +18,18 @@ class TestPDFPipelines:
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
-            Text_Partition(chunking_strategy="by_title", max_characters=1024),
+            TextPartition(chunking_strategy="by_title", max_characters=1024),
             Clean_extra_whitespace(),
         ])
     assert pipeline.name == 'pipeline-1'
     assert len(pipeline.transformations) == 2
 
   def test_pipeline_run(self,):
-    """Tests for pipeline run
-      """
+    """Tests for pipeline run"""
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
-            Text_Partition(chunking_strategy="by_title", max_characters=1024),
+            TextPartition(chunking_strategy="by_title", max_characters=1024),
             Clean_extra_whitespace(),
             ExtractTextAfter(
                 key='text_after', string='grippe being then a new word in St. Petersburg,')
@@ -43,12 +41,11 @@ class TestPDFPipelines:
     assert elements[0].metadata['text_after'] == 'used only by the elite.'
 
   def test_pipeline_run_chunker(self,):
-    """Tests for pipeline run with chunker
-    """
+    """Tests for pipeline run with chunker"""
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
-            Text_Partition(chunking_strategy="by_title", max_characters=100),
+            TextPartition(chunking_strategy="by_title", max_characters=100),
             Clean_extra_whitespace(),
         ])
     elements = pipeline.run(files=TEXT_FILE_PATH)

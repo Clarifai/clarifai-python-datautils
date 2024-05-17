@@ -1,3 +1,4 @@
 datumaro==1.5.1
 unstructured[all-docs]==0.13.2
-pdf2image==1.17.0
+llama-index-core==0.10.33
+llama-index-llms-clarifai==0.1.2

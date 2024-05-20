@@ -55,8 +55,8 @@ annotated_dataset = ImageAnnotations.import_from(path= 'folder_path', format= 'a
 
 ### Image Utils
 - #### Annotation Loader
-  - Load various annotated image datasets and export to clarifai Platform
-  - Convert from one annotation format to other supported annotation formats
+  - Load various annotated image datasets and export to clarifai Platform.
+  - Convert from one annotation format to other supported annotation formats.
 
 
 

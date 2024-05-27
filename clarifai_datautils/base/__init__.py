@@ -1,13 +1,14 @@
 from typing import TypeVar, Union
 
-from .features import (VisualClassificationFeatures, VisualDetectionFeatures,
-                       VisualSegmentationFeatures)
+from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
 
-DATASET_UPLOAD_TASKS = ["visual_classification", "visual_detection", "visual_segmentation"]
+from .features import (TextFeatures, VisualClassificationFeatures, VisualDetectionFeatures,
+                       VisualSegmentationFeatures)
 
 OutputFeaturesType = TypeVar(
     'OutputFeaturesType',
-    bound=Union[VisualClassificationFeatures, VisualDetectionFeatures, VisualSegmentationFeatures])
+    bound=Union[VisualClassificationFeatures, VisualDetectionFeatures, VisualSegmentationFeatures,
+                TextFeatures])
 
 
 class ClarifaiDataLoader:

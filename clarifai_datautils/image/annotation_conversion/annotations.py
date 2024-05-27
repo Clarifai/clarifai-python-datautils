@@ -4,11 +4,12 @@ from datumaro.components.dataset import Dataset
 from datumaro.components.errors import (DatasetError, DatasetImportError, DatasetNotFoundError,
                                         MultipleFormatsMatchError)
 
+from clarifai_datautils.base import ClarifaiDataLoader
 from clarifai_datautils.constants.annotations import (IMAGE_ANNOTATION_FORMATS,
                                                       IMAGE_ANNOTATION_FORMATS_TO_TASKS,
                                                       IMAGE_FORMAT_MAP)
+from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
 from clarifai_datautils.errors import AnnotationsDatasetError, AnnotationsFormatError
-from clarifai_datautils.image.annotation_conversion.base import ClarifaiDataLoader
 from clarifai_datautils.image.annotation_conversion.loaders import (ClassificationDataLoader,
                                                                     DetectionDataLoader,
                                                                     SegmentationDataLoader)
@@ -165,11 +166,11 @@ class ImageAnnotations():
         >>> format = ImageAnnotations.import_from(path=folder_path, format = 'coco_detection')
         >>> clarifai_dataset_loader = format.dataloader
     """
-    if self.task == 'visual_classification':
+    if self.task == DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION:
       return ClassificationDataLoader(self._dataset)
-    elif self.task == 'visual_detection':
+    elif self.task == DATASET_UPLOAD_TASKS.VISUAL_DETECTION:
       return DetectionDataLoader(self._dataset)
-    elif self.task == 'visual_segmentation':
+    elif self.task == DATASET_UPLOAD_TASKS.VISUAL_SEGMENTATION:
       return SegmentationDataLoader(self._dataset)
 
   def __str__(self) -> str:

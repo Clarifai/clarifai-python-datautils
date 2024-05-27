@@ -17,6 +17,7 @@ This is a collection of utilities for handling various types of multimedia data.
 * **[Getting Started](#getting-started)**
 * **[Features](#features)**
   * [Image Utils](#image-utils)
+  * [Data Ingestion Pipeline](#ingestion-pipeline)
 * **[Usage](#usage)**
 * **[Examples](#more-examples)**
 
@@ -58,7 +59,9 @@ annotated_dataset = ImageAnnotations.import_from(path= 'folder_path', format= 'a
   - Load various annotated image datasets and export to clarifai Platform
   - Convert from one annotation format to other supported annotation formats
 
-
+### Data Ingestion Pipeline
+  - Easy to use pipelines to load data from files and ingest into clarifai platfrom.
+  - Load text files(pdf, doc, etc..) , transform, chunk and upload to the Clarifai Platform
 
 ## Usage
 ### Image Annotation Loader
@@ -80,6 +83,30 @@ coco_dataset.get_info()
 #exporting to other formats
 coco_dataset.export_to('voc_detection')
 ```
+
+
+### Data Ingestion Pipelines
+```python
+from clarifai_datautils.text import Pipeline, PDFPartition
+from clarifai_datautils.text.pipeline.cleaners import Clean_extra_whitespace
+
+# Define the pipeline
+pipeline = Pipeline(
+    name='pipeline-1',
+    transformations=[
+        PDFPartition(chunking_strategy = "by_title",max_characters = 1024),
+        Clean_extra_whitespace()
+    ]
+)
+
+
+# Using SDK to upload
+from clarifai.client import Dataset
+dataset = Dataset(dataset_url)
+dataset.upload_dataset(pipeline.run(files = file_path, loader = True))
+
+```
+
 
 ## More Examples
 

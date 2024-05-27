@@ -5,10 +5,11 @@ import datumaro.plugins.transforms as transforms
 import numpy as np
 from datumaro.components.annotation import AnnotationType
 from datumaro.components.media import ImageFromNumpy
+from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
 
-from .base import ClarifaiDataLoader
-from .features import (VisualClassificationFeatures, VisualDetectionFeatures,
-                       VisualSegmentationFeatures)
+from ...base import ClarifaiDataLoader
+from ...base.features import (VisualClassificationFeatures, VisualDetectionFeatures,
+                              VisualSegmentationFeatures)
 
 delimiters = [",", "|", ";", "/", "\\", ":", " "]
 
@@ -35,7 +36,7 @@ class ClassificationDataLoader(ClarifaiDataLoader):
 
   @property
   def task(self):
-    return "visual_classification"
+    return DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
 
   def __getitem__(self, index: int):
     dataset_item = self.annotation_object.get(
@@ -90,7 +91,7 @@ class DetectionDataLoader(ClarifaiDataLoader):
 
   @property
   def task(self):
-    return "visual_detection"
+    return DATASET_UPLOAD_TASKS.VISUAL_DETECTION
 
   def __getitem__(self, index: int):
     dataset_item = self.annotation_object.get(
@@ -170,7 +171,7 @@ class SegmentationDataLoader(ClarifaiDataLoader):
 
   @property
   def task(self):
-    return "visual_segmentation"
+    return DATASET_UPLOAD_TASKS.VISUAL_SEGMENTATION
 
   def __getitem__(self, index: int):
     dataset_item = self.annotation_object.get(

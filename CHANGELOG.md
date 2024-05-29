@@ -1,3 +1,13 @@
+## [[0.0.3]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.3) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.3/) - 2024-05-29
+
+### Added
+- Data Ingestion Pipelines ```from clarifai_datautils.text import Pipeline``` [(#5)](https://github.com/Clarifai/clarifai-python-datautils/pull/5)
+- Data Ingestion Pipeline: PDF and Text file support  ```from clarifai_datautils.text import TextPartition, PDFPartition``` [(#5)](https://github.com/Clarifai/clarifai-python-datautils/pull/5)
+- Data Ingestion Pipeline: Cleaners and Extractors [(#5)](https://github.com/Clarifai/clarifai-python-datautils/pull/5)
+- Data Ingestion Pipeline: Clarifai Dataloader support  ```pipeline.run(files = filepath, loader = True)``` [(#5)](https://github.com/Clarifai/clarifai-python-datautils/pull/5)
+- Data Ingestion Pipeline: Llama Index Metadata Extractor [(#5)](https://github.com/Clarifai/clarifai-python-datautils/pull/5)
+- Data Ingestion Pipeline: Unit tests [(#5)](https://github.com/Clarifai/clarifai-python-datautils/pull/5)
+
 ## [[0.0.2]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.2) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.2/) - 2024-03-19
 
 ### Added

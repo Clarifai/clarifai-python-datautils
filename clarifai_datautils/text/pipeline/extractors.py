@@ -2,9 +2,9 @@ from typing import List
 
 from llama_index.core import Document
 from llama_index.core.node_parser import SentenceSplitter
-from unstructured.cleaners.extract import (
-    extract_datetimetz, extract_email_address, extract_ip_address, extract_ip_address_name,
-    extract_ordered_bullets, extract_text_after, extract_text_before)
+from unstructured.cleaners.extract import (extract_datetimetz, extract_email_address,
+                                           extract_ip_address, extract_ip_address_name,
+                                           extract_text_after, extract_text_before)
 from unstructured.documents.elements import Element, ElementMetadata
 
 from clarifai_datautils.constants.pipeline import MAX_NODES, SKIP_NODES
@@ -144,29 +144,6 @@ class ExtractIpAddressName(BaseTransform):
     """
     for element in elements:
       metadata = {'ip_address_name': extract_ip_address_name(element.text)}
-      element.metadata.update(ElementMetadata.from_dict(metadata))
-    return elements
-
-
-class ExtractOrderedBullets(BaseTransform):
-  """Extracts ordered bullets from text."""
-
-  def __init__(self):
-    """Initializes an ExtractOrderedBullets object."""
-    pass
-
-  def __call__(self, elements: List[str]) -> List[str]:
-    """Applies the transformation.
-
-    Args:
-        elements (List[str]): List of text elements.
-
-    Returns:
-        List of transformed text elements.
-
-    """
-    for element in elements:
-      metadata = {'ordered_bullets': extract_ordered_bullets(element.text)}
       element.metadata.update(ElementMetadata.from_dict(metadata))
     return elements
 

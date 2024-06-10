@@ -6,9 +6,9 @@ from clarifai_datautils.text.pipeline.cleaners import (
     Bytes_string_to_string, Clean_bullets, Clean_dashes, Clean_extra_whitespace,
     Clean_non_ascii_chars, Clean_ordered_bullets, Clean_postfix, Clean_prefix,
     Group_broken_paragraphs, Remove_punctuation, Replace_unicode_quotes)
-from clarifai_datautils.text.pipeline.extractors import (
-    ExtractDateTimeTz, ExtractEmailAddress, ExtractIpAddress, ExtractIpAddressName,
-    ExtractOrderedBullets, ExtractTextAfter, ExtractTextBefore)
+from clarifai_datautils.text.pipeline.extractors import (ExtractDateTimeTz, ExtractEmailAddress,
+                                                         ExtractIpAddress, ExtractIpAddressName,
+                                                         ExtractTextAfter, ExtractTextBefore)
 
 
 class TestPipelineTransformations:
@@ -69,15 +69,6 @@ class TestPipelineTransformations:
             datetime.datetime(
                 2021, 3, 26, 11, 4, 9, tzinfo=datetime.timezone(datetime.timedelta(seconds=43200)))
     }
-
-  def test_extractors_ordered_bullets(self,):
-    extractor = ExtractOrderedBullets()
-    element = extractor(
-        dict_to_elements([{
-            "text": """1. First bullet point, 2. Second bullet point, 3. Third bullet point""",
-            "type": "NarrativeText"
-        }]))
-    assert element[0].metadata.to_dict() == {'ordered_bullets': ('1', None, None)}
 
   def test_extractors_text_after(self,):
     extractor = ExtractTextAfter(key='text_after', string='this is the text after')

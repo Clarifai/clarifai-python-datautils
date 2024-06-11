@@ -152,7 +152,10 @@ class Bytes_string_to_string(BaseTransform):
 
     """
     for element in elements:
-      element.text = bytes_string_to_string(element.text)
+      try:
+        element.text = bytes_string_to_string(element.text)
+      except ValueError:
+        continue
     return elements
 
 

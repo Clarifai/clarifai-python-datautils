@@ -49,3 +49,10 @@ class TextFeatures:
   id: Optional[int] = None  # text_id
   metadata: Optional[dict] = None
   label_ids: Optional[List[str]] = None
+
+
+@dataclass
+class MultiModalFeatures:
+  """Multi-modal datasets preprocessing output features."""
+  textfeature: TextFeatures # Text elements as textfeature class object
+  visualfeature: VisualClassificationFeatures # Image elements as visualfeature class object

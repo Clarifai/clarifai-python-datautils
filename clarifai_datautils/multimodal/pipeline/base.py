@@ -1,8 +1,9 @@
 import os
 from typing import List, Type
-from .loaders import MultiModalLoader
 
 from tqdm import tqdm
+
+from .loaders import MultiModalLoader
 
 
 class BaseTransform:
@@ -38,7 +39,7 @@ class Pipeline:
         raise ValueError('All transformations should be of type BaseTransform.')
 
     #TODO: Schema for transformations
-    
+
   def run(self,
           files: str = None,
           folder: str = None,
@@ -77,29 +78,27 @@ class Pipeline:
       with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
         self.elements = self.transformations[0](self.elements)
         if isinstance(self.elements, tuple):
-            self.text_elements, self.image_elements = self.elements
+          self.text_elements, self.image_elements = self.elements
         progress.update()
-        
-        if len(self.transformations) > 1:  
+
+        if len(self.transformations) > 1:
           for transform in self.transformations[1:]:
             self.text_elements = transform(self.text_elements)
             progress.update()
-            
+
     else:
       self.elements = self.transformations[0](self.elements)
       if isinstance(self.elements, tuple):
-            self.text_elements, self.image_elements = self.elements
-          
-      if len(self.transformations) > 1:  
-          for transform in self.transformations[1:]:
-            self.text_elements = transform(self.text_elements)
-        
+        self.text_elements, self.image_elements = self.elements
+
+      if len(self.transformations) > 1:
+        for transform in self.transformations[1:]:
+          self.text_elements = transform(self.text_elements)
+
     self.elements = (self.text_elements, self.image_elements)
-    
+
     if loader is True:
-      return MultiModalLoader(
-          elements = self.elements, 
-          pipeline_name=self.name)
+      return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
 
     return self.elements
 

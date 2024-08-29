@@ -54,5 +54,5 @@ class TextFeatures:
 @dataclass
 class MultiModalFeatures:
   """Multi-modal datasets preprocessing output features."""
-  textfeature: TextFeatures # Text elements as textfeature class object
-  visualfeature: VisualClassificationFeatures # Image elements as visualfeature class object
+  textfeature: TextFeatures  # Text elements as textfeature class object
+  visualfeature: VisualClassificationFeatures  # Image elements as visualfeature class object

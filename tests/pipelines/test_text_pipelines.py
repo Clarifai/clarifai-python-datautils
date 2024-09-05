@@ -1,8 +1,8 @@
 import os.path as osp
 
-from clarifai_datautils.text import Pipeline, TextPartition
-from clarifai_datautils.text.pipeline.cleaners import Clean_extra_whitespace
-from clarifai_datautils.text.pipeline.extractors import ExtractTextAfter
+from clarifai_datautils.multimodal import Pipeline, TextPartition
+from clarifai_datautils.multimodal.pipeline.cleaners import Clean_extra_whitespace
+from clarifai_datautils.multimodal.pipeline.extractors import ExtractTextAfter
 
 TEXT_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "book-war-and-peace-1p.txt"))

@@ -1,8 +1,8 @@
 import os.path as osp
 
-from clarifai_datautils.text import PDFPartition, Pipeline
-from clarifai_datautils.text.pipeline.cleaners import Clean_extra_whitespace
-from clarifai_datautils.text.pipeline.extractors import ExtractTextAfter
+from clarifai_datautils.multimodal import PDFPartition, Pipeline
+from clarifai_datautils.multimodal.pipeline.cleaners import Clean_extra_whitespace
+from clarifai_datautils.multimodal.pipeline.extractors import ExtractTextAfter
 
 PDF_FILE_PATH = osp.abspath(osp.join(osp.dirname(__file__), "assets", "DA-1p.pdf"))
 

@@ -2,13 +2,13 @@ import datetime
 
 from unstructured.staging.base import dict_to_elements
 
-from clarifai_datautils.text.pipeline.cleaners import (
+from clarifai_datautils.multimodal.pipeline.cleaners import (
     Bytes_string_to_string, Clean_bullets, Clean_dashes, Clean_extra_whitespace,
     Clean_non_ascii_chars, Clean_ordered_bullets, Clean_postfix, Clean_prefix,
     Group_broken_paragraphs, Remove_punctuation, Replace_unicode_quotes)
-from clarifai_datautils.text.pipeline.extractors import (ExtractDateTimeTz, ExtractEmailAddress,
-                                                         ExtractIpAddress, ExtractIpAddressName,
-                                                         ExtractTextAfter, ExtractTextBefore)
+from clarifai_datautils.multimodal.pipeline.extractors import (
+    ExtractDateTimeTz, ExtractEmailAddress, ExtractIpAddress, ExtractIpAddressName,
+    ExtractTextAfter, ExtractTextBefore)
 
 
 class TestPipelineTransformations:

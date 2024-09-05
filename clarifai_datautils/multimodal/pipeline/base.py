@@ -3,7 +3,7 @@ from typing import List, Type
 
 from tqdm import tqdm
 
-from .loaders import MultiModalLoader
+from .loaders import MultiModalLoader, TextDataLoader
 
 
 class BaseTransform:
@@ -73,34 +73,51 @@ class Pipeline:
       self.elements = [os.path.join(folder, f) for f in os.listdir(folder)]
 
     # Apply transformations
-    #TODO: num_workers support
-    if show_progress:
-      with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
+    if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
+      #TODO: num_workers support
+      if show_progress:
+        with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
+          self.elements = self.transformations[0](self.elements)
+          if isinstance(self.elements, tuple):
+            self.text_elements, self.image_elements = self.elements
+          progress.update()
+
+          if len(self.transformations) > 1:
+            for transform in self.transformations[1:]:
+              self.text_elements = transform(self.text_elements)
+              progress.update()
+
+      else:
         self.elements = self.transformations[0](self.elements)
         if isinstance(self.elements, tuple):
           self.text_elements, self.image_elements = self.elements
-        progress.update()
 
         if len(self.transformations) > 1:
           for transform in self.transformations[1:]:
             self.text_elements = transform(self.text_elements)
-            progress.update()
+
+      self.elements = (self.text_elements, self.image_elements)
+
+      if loader is True:
+        return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
+
+      return self.elements
 
     else:
-      self.elements = self.transformations[0](self.elements)
-      if isinstance(self.elements, tuple):
-        self.text_elements, self.image_elements = self.elements
+      #TODO: num_workers support
+      if show_progress:
+        with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
+          for transform in self.transformations:
+            self.elements = transform(self.elements)
+            progress.update()
+      else:
+        for transform in self.transformations:
+          self.elements = transform(self.elements)
 
-      if len(self.transformations) > 1:
-        for transform in self.transformations[1:]:
-          self.text_elements = transform(self.text_elements)
+      if loader is True:
+        return TextDataLoader(self.elements, pipeline_name=self.name)
 
-    self.elements = (self.text_elements, self.image_elements)
-
-    if loader is True:
-      return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
-
-    return self.elements
+      return self.elements
 
   def load() -> 'Pipeline':
     """Loads a pipeline from a yaml file.

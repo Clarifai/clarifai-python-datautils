@@ -79,3 +79,28 @@ class MultiModalLoader():
       return self.TextDataLoader(self.elements[0], self.pipeline_name)
     elif loader_type == 'image':
       return self.VisualDataLoader(self.elements[1], self.pipeline_name)
+
+
+class TextDataLoader(ClarifaiDataLoader):
+  """Text Dataset object."""
+
+  def __init__(self, elements, pipeline_name=None):
+    """
+    Args:
+      elements: List of elements.
+    """
+    self.elements = elements
+    self.pipeline_name = pipeline_name
+
+  @property
+  def task(self):
+    return DATASET_UPLOAD_TASKS.TEXT_CLASSIFICATION  #TODO: Better dataset name in SDK
+
+  def __getitem__(self, index: int):
+    return TextFeatures(
+        text=self.elements[index].text,
+        labels=self.pipeline_name,
+        metadata=self.elements[index].metadata.to_dict())
+
+  def __len__(self):
+    return len(self.elements)

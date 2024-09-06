@@ -1,4 +1,5 @@
-from typing import List, Type
+from typing import List
+
 
 class BaseTransform:
   """Base Transform Component"""

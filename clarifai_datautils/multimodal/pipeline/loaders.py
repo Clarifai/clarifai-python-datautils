@@ -3,10 +3,10 @@ import base64
 from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
 
 from ...base import ClarifaiDataLoader
-from ...base.features import TextFeatures, VisualClassificationFeatures
+from ...base.features import MultiModalFeatures, TextFeatures
 
 
-class MultiModalLoader():
+class MultiModalLoader(ClarifaiDataLoader):
   """MultiModal Dataset object."""
 
   def __init__(self, elements, pipeline_name=None):
@@ -15,70 +15,42 @@ class MultiModalLoader():
           elements: Tuple of List of elements, where element[0]=text chunks,
           element[1]=image objects.
         """
-    self.elements = elements
+    self.elements = []
     self.pipeline_name = pipeline_name
+    if isinstance(elements, tuple):
+      self.elements.extend(elements[0])
+      self.elements.extend(elements[1])
 
-  class TextDataLoader(ClarifaiDataLoader):
-    """Text Dataset object."""
+  @property
+  def task(self):
+    return DATASET_UPLOAD_TASKS.MULTIMODAL_CLASSIFICATION
 
-    def __init__(self, elements, pipeline_name=None):
-      """
-            Args:
-              elements: List of elements.
-            """
-      self.elements = elements  #List of text chunk objects
-      self.pipeline_name = pipeline_name
+  def __getitem__(self, index: int):
+    meta = self.elements[index].metadata.to_dict()
+    meta.pop('coordinates', None)
+    meta.pop('detection_class_prob', None)
+    image_data = meta.pop('image_base64', None)
+    if image_data is not None:
+      # Ensure image_data is already bytes before encoding
+      image_data = base64.b64decode(image_data)
+    else:
+      image_data = None
 
-    @property
-    def task(self):
-      return DATASET_UPLOAD_TASKS.TEXT_CLASSIFICATION
+    if self.elements[index].to_dict()['type'] == 'Table':
+      meta['type'] = 'table'
 
-    def __getitem__(self, index: int):
-      meta = self.elements[index].metadata.to_dict()
-      meta.pop('coordinates', None)
-      meta.pop('detection_class_prob', None)
-      if 'type' in self.elements[index].to_dict():
-        if self.elements[index].to_dict()['type'] == 'Table':
-          meta['type'] = 'Table'
-      return TextFeatures(
-          text=self.elements[index].text, labels=[self.pipeline_name], metadata=meta)
+    if image_data is None:
+      text = self.elements[index].text
+      meta['type'] = 'image'
 
-    def __len__(self):
-      return len(self.elements)
+    else:
+      text = None
 
-  class VisualDataLoader(ClarifaiDataLoader):
-    """Visual Dataset object."""
+    return MultiModalFeatures(
+        text=text, image_bytes=image_data, labels=[self.pipeline_name], metadata=meta)
 
-    def __init__(self, elements, pipeline_name=None):
-      """
-            Args:
-              elements: List of elements.
-            """
-      self.elements = elements  #List of image objects
-      self.pipeline_name = pipeline_name
-
-    @property
-    def task(self):
-      return DATASET_UPLOAD_TASKS.VISUAL_CLASSIFICATION
-
-    def __getitem__(self, index: int):
-      meta = self.elements[index].metadata.to_dict()
-      meta.pop('detection_class_prob', None)
-      meta.pop('coordinates', None)
-      return VisualClassificationFeatures(
-          image_path=None,
-          image_bytes=base64.b64decode(meta.pop('image_base64', None)),
-          labels=[self.pipeline_name],
-          metadata=meta)
-
-    def __len__(self):
-      return len(self.elements)
-
-  def get_loader(self, loader_type):
-    if loader_type == 'text':
-      return self.TextDataLoader(self.elements[0], self.pipeline_name)
-    elif loader_type == 'image':
-      return self.VisualDataLoader(self.elements[1], self.pipeline_name)
+  def __len__(self):
+    return len(self.elements)
 
 
 class TextDataLoader(ClarifaiDataLoader):

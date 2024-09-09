@@ -54,5 +54,8 @@ class TextFeatures:
 @dataclass
 class MultiModalFeatures:
   """Multi-modal datasets preprocessing output features."""
-  textfeature: TextFeatures  # Text elements as textfeature class object
-  visualfeature: VisualClassificationFeatures  # Image elements as visualfeature class object
+  text: Optional[str] = None
+  image_bytes: Optional[str] = None
+  labels: List[Union[str, int]] = None  # List[str or int] to cater for multi-class tasks
+  id: Optional[int] = None  # image_id
+  metadata: Optional[dict] = None

@@ -47,3 +47,22 @@ class TestMultimodalPipelines:
     assert elements[0][0].metadata.to_dict()['email_address'] == ['test_extraction@gmail.com']
     assert elements[0][6].__class__.__name__ == 'Table'
     assert elements[1][0].__class__.__name__ == 'Image'
+
+  def test_pipeline_run_loader(self,):
+    """Tests for pipeline run with loader"""
+    from clarifai_datautils.multimodal import Pipeline
+    from clarifai_datautils.multimodal.pipeline.cleaners import Clean_extra_whitespace
+    from clarifai_datautils.multimodal.pipeline.extractors import ExtractEmailAddress
+    from clarifai_datautils.multimodal.pipeline.PDF import PDFPartitionMultimodal
+
+    pipeline = Pipeline(
+        name='pipeline-1',
+        transformations=[
+            PDFPartitionMultimodal(chunking_strategy="by_title", max_characters=1024),
+            Clean_extra_whitespace(),
+            ExtractEmailAddress()
+        ])
+    elements = pipeline.run(files=PDF_FILE_PATH, loader=True)
+    assert elements.__class__.__name__ == 'MultiModalLoader'
+    assert len(elements) == 14
+    assert elements.elements[0].metadata.to_dict()['filename'] == 'Multimodal_sample_file.pdf'

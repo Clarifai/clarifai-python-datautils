@@ -4,7 +4,7 @@ from unstructured.partition.pdf import partition_pdf
 
 from clarifai_datautils.constants.pipeline import MAX_CHARACTERS
 
-from .basetransform import BaseTransform
+from .base import BaseTransform
 
 
 class PDFPartition(BaseTransform):

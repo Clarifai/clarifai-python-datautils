@@ -9,7 +9,7 @@ from unstructured.documents.elements import Element, ElementMetadata
 
 from clarifai_datautils.constants.pipeline import MAX_NODES, SKIP_NODES
 
-from .basetransform import BaseTransform
+from .base import BaseTransform
 
 
 class LlamaIndexWrapper(BaseTransform):

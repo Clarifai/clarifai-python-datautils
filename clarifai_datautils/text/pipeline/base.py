@@ -3,10 +3,18 @@ from typing import List, Type
 
 from tqdm import tqdm
 
-from clarifai_datautils.text.pipeline.custom_pipeline import Custom_Pipelines
-
-from .basetransform import BaseTransform
 from .loaders import TextDataLoader
+
+
+class BaseTransform:
+  """Base Transform Component"""
+
+  def __init__(self) -> None:
+    pass
+
+  def __call__(self,) -> List:
+    """Transform components."""
+    raise NotImplementedError()
 
 
 class Pipeline:
@@ -26,7 +34,6 @@ class Pipeline:
     """
     self.name = name
     self.transformations = transformations
-
     for transform in self.transformations:
       if not isinstance(transform, BaseTransform):
         raise ValueError('All transformations should be of type BaseTransform.')
@@ -81,40 +88,15 @@ class Pipeline:
 
     return self.elements
 
-  @classmethod
-  def load(self, name) -> 'Pipeline':
-    """Loads a ready to use set of pipelines.
+  def load() -> 'Pipeline':
+    """Loads a pipeline from a yaml file.
 
     Returns:
         Pipeline object.
 
     """
-    self.name = name
-    self.custom_pipelines_map = {
-        'basic_pdf': Custom_Pipelines.basic_pdf_pipeline(),
-        'standard_pdf': Custom_Pipelines.standard_pdf_pipeline(),
-        'context_overlap_pdf': Custom_Pipelines.context_overlap_pdf_pipeline(),
-        'ocr_pdf': Custom_Pipelines.ocr_pdf_pipeline(),
-        'structured_pdf': Custom_Pipelines.structured_pdf_pipeline(),
-        'standard_text': Custom_Pipelines.standard_text_pipeline(),
-    }
-    try:
-      if self.name in self.custom_pipelines_map:
-        return Pipeline(self.name, self.custom_pipelines_map[self.name])
-
-    except Exception as e:
-      raise ValueError(f'Pipeline {self.name} not found in custom_pipelines_map.') from e
-
-  def info(self,) -> None:
-    """Prints the pipeline information."""
-    if self.name in self.custom_pipelines_map:
-      print(f'Pipeline: {self.name}')
-      for transform in self.custom_pipelines_map[self.name]():
-        print(f'\t{transform}')
-    else:
-      print(f'Pipeline: {self.name}')
-      for transform in self.transformations:
-        print(f'\t{transform}')
+    #TODO: Implement this
+    pass
 
   def save(self,) -> None:
     """Saves the pipeline to a yaml file."""

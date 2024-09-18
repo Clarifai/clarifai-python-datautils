@@ -5,7 +5,7 @@ from unstructured.cleaners.core import (
     clean_non_ascii_chars, clean_ordered_bullets, clean_postfix, clean_prefix,
     group_broken_paragraphs, remove_punctuation, replace_unicode_quotes)
 
-from .basetransform import BaseTransform
+from .base import BaseTransform
 
 
 class Clean_extra_whitespace(BaseTransform):

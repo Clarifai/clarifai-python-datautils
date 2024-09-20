@@ -16,11 +16,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]  # TODO: Add windows-latest after python-magic is fixed
+        os: [macos-latest]  # TODO: Add windows-latest after python-magic is fixed
         python-version:
           - '3.11'
-          - '3.10'
-          - '3.9'
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}

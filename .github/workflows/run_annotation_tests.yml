@@ -12,6 +12,7 @@ on:
 jobs:
   annotation-tests:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -32,4 +33,7 @@ jobs:
         pip install datumaro==1.6.1
         pip install -r tests/requirements.txt
     - name: Run annotation tests
-      run: pytest tests/annotations/
+      shell: bash
+      run: |
+        export PYTHONPATH=.
+        pytest tests/annotations/

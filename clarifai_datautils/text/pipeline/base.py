@@ -103,7 +103,7 @@ class Pipeline:
         return Pipeline(self.name, self.custom_pipelines_map[self.name])
 
     except Exception as e:
-      raise ValueError(f'Pipeline {self.name} not found in custom_pipelines_map.') from e
+      raise ValueError(f'Pipeline {self.name} not found in custom_pipelines_map') from e
 
   def info(self,) -> None:
     """Prints the pipeline information."""

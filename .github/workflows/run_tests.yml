@@ -10,15 +10,17 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest]  # TODO: Add windows-latest after python-magic is fixed
+        os: [ubuntu-latest, macos-latest]  # TODO: Add windows-latest after python-magic is fixed
         python-version:
+          - '3.12'
           - '3.11'
+          - '3.10'
+          - '3.9'
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -30,10 +32,55 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r tests/requirements.txt
+        python -m nltk.downloader averaged_perceptron_tagger_eng
+        python -m nltk.downloader punkt_tab
     - name: Run static analysis lint
       uses: pre-commit/action@v3.0.0
     - name: Run pytest
       shell: bash
       run: |
         export PYTHONPATH=.
-        pytest tests/
+        pytest tests/pipelines/
+
+  determine-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      run_annotation_tests: ${{ steps.set-output.outputs.run_annotation_tests }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Determine if changes were made in clarifai_datautils/image
+      id: set-output
+      run: |
+        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'clarifai_datautils/image/'; then
+          echo "::set-output name=run_annotation_tests::true"
+        else
+          echo "::set-output name=run_annotation_tests::false"
+        fi
+
+  annotation-tests:
+    needs: determine-changes
+    runs-on: ${{ matrix.os }}
+    if: ${{ needs.determine-changes.outputs.run_annotation_tests == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]  # TODO: Add windows-latest after python-magic is fixed
+        python-version:
+          - '3.11'
+          - '3.10'
+          - '3.9'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies for annotation tests
+      run: |
+        python -m pip install --upgrade pip
+        pip install datumaro==1.6.1
+        pip install -r tests/requirements.txt
+    - name: Run second tests
+      run: pytest tests/annotations/

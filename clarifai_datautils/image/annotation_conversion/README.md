@@ -19,7 +19,6 @@ coco_dataset.get_info()
 coco_dataset.export_to('voc_detection')
 ```
 
-
 ### Upload using Clarifai Python SDK
 ```python
 from clarifai_datautils import ImageAnnotations

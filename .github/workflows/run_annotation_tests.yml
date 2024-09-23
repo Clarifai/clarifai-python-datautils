@@ -1,0 +1,36 @@
+name: Run annotation tests
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'clarifai_datautils/image/**'
+  pull_request:
+    paths:
+      - 'clarifai_datautils/image/**'
+
+jobs:
+  annotation-tests:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]  # TODO: Add windows-latest after python-magic is fixed
+        python-version:
+          - '3.11'
+          - '3.10'
+          - '3.9'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies for annotation tests
+      run: |
+        python -m pip install --upgrade pip
+        pip install datumaro==1.6.1
+        pip install -r tests/requirements.txt
+    - name: Run second tests
+      run: pytest tests/annotations/
+  

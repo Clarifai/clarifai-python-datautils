@@ -105,7 +105,7 @@ class PDFPartitionMultimodal(BaseTransform):
     self.overlap_all = overlap_all
     self.kwargs = kwargs
 
-  def __call__(self, elements: List[str]) -> tuple[List]:
+  def __call__(self, elements: List[str]) -> List[str]:
     """Applies the transformation.
 
         Args:
@@ -115,8 +115,7 @@ class PDFPartitionMultimodal(BaseTransform):
             List of transformed text elements.
 
         """
-    text_elements = []
-    image_elements = []
+    file_elements = []
     for filename in elements:
       file_element = partition_pdf(
           filename=filename,
@@ -142,8 +141,7 @@ class PDFPartitionMultimodal(BaseTransform):
             overlap_all=self.overlap_all,
             **self.kwargs)
 
-      multimodal_elements = [elem for elem in file_element if elem.to_dict()['type'] == 'Image']
-      text_elements.extend(text_chunks)
-      image_elements.extend(multimodal_elements)
+      file_elements.extend(text_chunks)
+      file_elements.extend([elem for elem in file_element if elem.to_dict()['type'] == 'Image'])
 
-    return (text_elements, image_elements)
+    return file_elements

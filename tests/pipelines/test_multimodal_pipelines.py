@@ -38,13 +38,13 @@ class TestMultimodalPipelines:
             ExtractEmailAddress()
         ])
     elements = pipeline.run(files=PDF_FILE_PATH, loader=False)
-    assert len(elements) == 2
-    assert type(elements) == tuple
-    assert elements[0][0].metadata.to_dict()['filename'] == 'Multimodal_sample_file.pdf'
-    assert elements[0][0].metadata.to_dict()['page_number'] == 1
-    assert elements[0][0].metadata.to_dict()['email_address'] == ['test_extraction@gmail.com']
-    assert elements[0][6].__class__.__name__ == 'Table'
-    assert elements[1][0].__class__.__name__ == 'Image'
+    assert len(elements) == 14
+    assert isinstance(elements, list)
+    assert elements[0].metadata.to_dict()['filename'] == 'Multimodal_sample_file.pdf'
+    assert elements[0].metadata.to_dict()['page_number'] == 1
+    assert elements[0].metadata.to_dict()['email_address'] == ['test_extraction@gmail.com']
+    assert elements[6].__class__.__name__ == 'Table'
+    assert elements[-1].__class__.__name__ == 'Image'
 
   def test_pipeline_run_loader(self,):
     """Tests for pipeline run with loader"""

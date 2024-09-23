@@ -75,28 +75,38 @@ class Pipeline:
     # Apply transformations
     if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
       #TODO: num_workers support
+      first_task = True
       if show_progress:
         with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
-          self.elements = self.transformations[0](self.elements)
-          if isinstance(self.elements, tuple):
-            self.text_elements, self.image_elements = self.elements
-          progress.update()
+          if first_task:
+            self.elements = self.transformations[0](self.elements)
+            self.image_elements = [
+                elem for elem in self.elements if elem.to_dict()['type'] == 'Image'
+            ]
+            self.elements = [elem for elem in self.elements if elem.to_dict()['type'] != 'Image']
+            progress.update()
+            first_task = False
 
           if len(self.transformations) > 1:
             for transform in self.transformations[1:]:
-              self.text_elements = transform(self.text_elements)
+              self.elements = transform(self.elements)
               progress.update()
 
       else:
         self.elements = self.transformations[0](self.elements)
-        if isinstance(self.elements, tuple):
-          self.text_elements, self.image_elements = self.elements
+        if first_task:
+          self.image_elements = [
+              elem for elem in self.elements if elem.to_dict()['type'] == 'Image'
+          ]
+          self.elements = [elem for elem in self.elements if elem.to_dict()['type'] != 'Image']
+
+        first_task = False
 
         if len(self.transformations) > 1:
           for transform in self.transformations[1:]:
-            self.text_elements = transform(self.text_elements)
+            self.elements = transform(self.elements)
 
-      self.elements = (self.text_elements, self.image_elements)
+      self.elements.extend(self.image_elements)
 
       if loader is True:
         return MultiModalLoader(elements=self.elements, pipeline_name=self.name)

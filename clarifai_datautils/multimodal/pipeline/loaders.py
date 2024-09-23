@@ -15,11 +15,8 @@ class MultiModalLoader(ClarifaiDataLoader):
           elements: Tuple of List of elements, where element[0]=text chunks,
           element[1]=image objects.
         """
-    self.elements = []
+    self.elements = elements
     self.pipeline_name = pipeline_name
-    if isinstance(elements, tuple):
-      self.elements.extend(elements[0])
-      self.elements.extend(elements[1])
 
   @property
   def task(self):

@@ -4,7 +4,6 @@ A framework to load,export and analyze different annotated datasets
 
 
 ## Usage
-
 ### Features
 ```python
 from clarifai_datautils import ImageAnnotations

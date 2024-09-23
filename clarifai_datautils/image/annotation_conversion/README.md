@@ -1,6 +1,6 @@
 # Annotation Loader
 
-A framework to load, export and analyze different annotated datasets.
+A framework to load, export and analyze different annotated datasets
 
 
 ## Usage

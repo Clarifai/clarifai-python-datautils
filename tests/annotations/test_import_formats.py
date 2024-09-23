@@ -1,7 +1,7 @@
 import pytest
 
-from clarifai_datautils import ImageAnnotations
 from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
+from clarifai_datautils.image import ImageAnnotations
 from tests.utils.annotations import get_asset_path
 
 IMAGENET_PATH = get_asset_path('imagenet_dataset')

@@ -1,10 +1,9 @@
 # Annotation Loader
 
-A framework to load, export and analyze different annotated datasets.
+A framework to load,export and analyze different annotated datasets
 
 
 ## Usage
-
 ### Features
 ```python
 from clarifai_datautils import ImageAnnotations
@@ -19,7 +18,6 @@ coco_dataset.get_info()
 #exporting to other formats
 coco_dataset.export_to('voc_detection')
 ```
-
 
 ### Upload using Clarifai Python SDK
 ```python

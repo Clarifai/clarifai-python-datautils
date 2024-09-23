@@ -32,6 +32,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
@@ -39,4 +40,7 @@ setuptools.setup(
     license="Apache 2.0",
     python_requires='>=3.8',
     install_requires=install_requires,
+    extras_require={
+        'annotations': ["datumaro==1.6.1"],
+    },
     include_package_data=True)

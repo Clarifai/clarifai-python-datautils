@@ -105,7 +105,7 @@ class PDFPartitionMultimodal(BaseTransform):
     self.overlap_all = overlap_all
     self.kwargs = kwargs
 
-  def __call__(self, elements: List[str]) -> List[str]:
+  def __call__(self, elements: List[str]) -> tuple[List]:
     """Applies the transformation.
 
         Args:

@@ -23,7 +23,7 @@ class MultiModalLoader(ClarifaiDataLoader):
 
   @property
   def task(self):
-    return DATASET_UPLOAD_TASKS.MULTIMODAL_CLASSIFICATION
+    return DATASET_UPLOAD_TASKS.MULTIMODAL_DATASET
 
   def __getitem__(self, index: int):
     meta = self.elements[index].metadata.to_dict()
@@ -33,18 +33,13 @@ class MultiModalLoader(ClarifaiDataLoader):
     if image_data is not None:
       # Ensure image_data is already bytes before encoding
       image_data = base64.b64decode(image_data)
+      text = None
+      meta['type'] = 'image'
     else:
-      image_data = None
+      text = self.elements[index].text
 
     if self.elements[index].to_dict()['type'] == 'Table':
       meta['type'] = 'table'
-
-    if image_data is None:
-      text = self.elements[index].text
-      meta['type'] = 'image'
-
-    else:
-      text = None
 
     return MultiModalFeatures(
         text=text, image_bytes=image_data, labels=[self.pipeline_name], metadata=meta)

@@ -84,4 +84,3 @@ jobs:
         pip install -r tests/requirements.txt
     - name: Run second tests
       run: pytest tests/annotations/
-      

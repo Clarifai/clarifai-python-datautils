@@ -84,14 +84,12 @@ class Pipeline:
       for transform in self.transformations:
         self.elements = transform(self.elements)
 
-    if loader is True and self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
-      return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
+    if loader:
+        if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
+            return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
+        return TextDataLoader(elements=self.elements, pipeline_name=self.name)
 
-    elif loader is True:
-      return TextDataLoader(elements=self.elements, pipeline_name=self.name)
-
-    else:
-      return self.elements
+    return self.elements
 
   def load() -> 'Pipeline':
     """Loads a pipeline from a yaml file.

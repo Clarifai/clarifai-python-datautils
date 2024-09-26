@@ -4,7 +4,7 @@ from unstructured.partition.text import partition_text
 
 from clarifai_datautils.constants.pipeline import MAX_CHARACTERS
 
-from .base import BaseTransform
+from .basetransform import BaseTransform
 
 
 class TextPartition(BaseTransform):

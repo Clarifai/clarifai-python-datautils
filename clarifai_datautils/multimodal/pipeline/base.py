@@ -3,7 +3,7 @@ from typing import List, Type
 
 from tqdm import tqdm
 
-from .loaders import TextDataLoader
+from .loaders import MultiModalLoader, TextDataLoader
 
 
 class BaseTransform:
@@ -79,12 +79,15 @@ class Pipeline:
         for transform in self.transformations:
           self.elements = transform(self.elements)
           progress.update()
+
     else:
       for transform in self.transformations:
         self.elements = transform(self.elements)
 
-    if loader is True:
-      return TextDataLoader(self.elements, pipeline_name=self.name)
+    if loader:
+      if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
+        return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
+      return TextDataLoader(elements=self.elements, pipeline_name=self.name)
 
     return self.elements
 

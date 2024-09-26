@@ -7,3 +7,4 @@ class DATASET_UPLOAD_TASKS:
   VISUAL_DETECTION: str = "visual_detection"
   VISUAL_SEGMENTATION: str = "visual_segmentation"
   TEXT_CLASSIFICATION: str = "text_classification"
+  MULTIMODAL_DATASET: str = "multimodal_dataset"

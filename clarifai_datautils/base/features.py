@@ -49,3 +49,13 @@ class TextFeatures:
   id: Optional[int] = None  # text_id
   metadata: Optional[dict] = None
   label_ids: Optional[List[str]] = None
+
+
+@dataclass
+class MultiModalFeatures:
+  """Multi-modal datasets preprocessing output features."""
+  text: Optional[str] = None
+  image_bytes: Optional[str] = None
+  labels: List[Union[str, int]] = None  # List[str or int] to cater for multi-class tasks
+  id: Optional[int] = None  # image_id
+  metadata: Optional[dict] = None

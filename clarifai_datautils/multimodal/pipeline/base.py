@@ -85,9 +85,9 @@ class Pipeline:
         self.elements = transform(self.elements)
 
     if loader:
-        if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
-            return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
-        return TextDataLoader(elements=self.elements, pipeline_name=self.name)
+      if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':
+        return MultiModalLoader(elements=self.elements, pipeline_name=self.name)
+      return TextDataLoader(elements=self.elements, pipeline_name=self.name)
 
     return self.elements
 

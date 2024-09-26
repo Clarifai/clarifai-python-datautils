@@ -74,8 +74,9 @@ class ExtractDateTimeTz(BaseTransform):
 
     """
     for element in elements:
-      metadata = {'date_time': extract_datetimetz(element.text)}
-      element.metadata.update(ElementMetadata.from_dict(metadata))
+      if element.text:
+        metadata = {'date_time': extract_datetimetz(element.text)}
+        element.metadata.update(ElementMetadata.from_dict(metadata))
     return elements
 
 
@@ -97,8 +98,9 @@ class ExtractEmailAddress(BaseTransform):
 
     """
     for element in elements:
-      metadata = {'email_address': extract_email_address(element.text)}
-      element.metadata.update(ElementMetadata.from_dict(metadata))
+      if element.text:
+        metadata = {'email_address': extract_email_address(element.text)}
+        element.metadata.update(ElementMetadata.from_dict(metadata))
     return elements
 
 
@@ -120,8 +122,9 @@ class ExtractIpAddress(BaseTransform):
 
     """
     for element in elements:
-      metadata = {'ip_address': extract_ip_address(element.text)}
-      element.metadata.update(ElementMetadata.from_dict(metadata))
+      if element.text:
+        metadata = {'ip_address': extract_ip_address(element.text)}
+        element.metadata.update(ElementMetadata.from_dict(metadata))
     return elements
 
 
@@ -143,8 +146,9 @@ class ExtractIpAddressName(BaseTransform):
 
     """
     for element in elements:
-      metadata = {'ip_address_name': extract_ip_address_name(element.text)}
-      element.metadata.update(ElementMetadata.from_dict(metadata))
+      if element.text:
+        metadata = {'ip_address_name': extract_ip_address_name(element.text)}
+        element.metadata.update(ElementMetadata.from_dict(metadata))
     return elements
 
 
@@ -174,8 +178,9 @@ class ExtractTextAfter(BaseTransform):
     """
     for element in elements:
       try:
-        metadata = {self.key: extract_text_after(element.text, self.string)}
-        element.metadata.update(ElementMetadata.from_dict(metadata))
+        if element.text:
+          metadata = {self.key: extract_text_after(element.text, self.string)}
+          element.metadata.update(ElementMetadata.from_dict(metadata))
       except Exception:
         pass
     return elements
@@ -207,8 +212,9 @@ class ExtractTextBefore(BaseTransform):
     """
     for element in elements:
       try:
-        metadata = {self.key: extract_text_before(element.text, self.string)}
-        element.metadata.update(ElementMetadata.from_dict(metadata))
+        if element.text:
+          metadata = {self.key: extract_text_before(element.text, self.string)}
+          element.metadata.update(ElementMetadata.from_dict(metadata))
       except Exception:
         pass
     return elements

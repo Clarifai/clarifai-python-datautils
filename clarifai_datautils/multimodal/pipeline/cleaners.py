@@ -26,7 +26,8 @@ class Clean_extra_whitespace(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_extra_whitespace(element.text)
+      if element.text:
+        element.text = clean_extra_whitespace(element.text)
     return elements
 
 
@@ -47,7 +48,8 @@ class Replace_unicode_quotes(BaseTransform):
 
     """
     for element in elements:
-      element.text = replace_unicode_quotes(element.text)
+      if element.text:
+        element.text = replace_unicode_quotes(element.text)
     return elements
 
 
@@ -68,7 +70,8 @@ class Clean_dashes(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_dashes(element.text)
+      if element.text:
+        element.text = clean_dashes(element.text)
     return elements
 
 
@@ -89,7 +92,8 @@ class Clean_bullets(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_bullets(element.text)
+      if element.text:
+        element.text = clean_bullets(element.text)
     return elements
 
 
@@ -110,7 +114,8 @@ class Group_broken_paragraphs(BaseTransform):
 
     """
     for element in elements:
-      element.text = group_broken_paragraphs(element.text)
+      if element.text:
+        element.text = group_broken_paragraphs(element.text)
     return elements
 
 
@@ -131,7 +136,8 @@ class Remove_punctuation(BaseTransform):
 
     """
     for element in elements:
-      element.text = remove_punctuation(element.text)
+      if element.text:
+        element.text = remove_punctuation(element.text)
     return elements
 
 
@@ -153,7 +159,8 @@ class Bytes_string_to_string(BaseTransform):
     """
     for element in elements:
       try:
-        element.text = bytes_string_to_string(element.text)
+        if element.text:
+          element.text = bytes_string_to_string(element.text)
       except ValueError:
         continue
     return elements
@@ -176,7 +183,8 @@ class Clean_non_ascii_chars(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_non_ascii_chars(element.text)
+      if element.text:
+        element.text = clean_non_ascii_chars(element.text)
     return elements
 
 
@@ -197,7 +205,8 @@ class Clean_ordered_bullets(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_ordered_bullets(element.text)
+      if element.text:
+        element.text = clean_ordered_bullets(element.text)
     return elements
 
 
@@ -227,8 +236,9 @@ class Clean_prefix(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_prefix(
-          element.text, pattern=self.pattern, ignore_case=self.ignore_case, strip=self.strip)
+      if element.text:
+        element.text = clean_prefix(
+            element.text, pattern=self.pattern, ignore_case=self.ignore_case, strip=self.strip)
     return elements
 
 
@@ -258,6 +268,7 @@ class Clean_postfix(BaseTransform):
 
     """
     for element in elements:
-      element.text = clean_postfix(
-          element.text, pattern=self.pattern, ignore_case=self.ignore_case, strip=self.strip)
+      if element.text:
+        element.text = clean_postfix(
+            element.text, pattern=self.pattern, ignore_case=self.ignore_case, strip=self.strip)
     return elements

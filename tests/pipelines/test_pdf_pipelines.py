@@ -71,9 +71,7 @@ class TestPDFPipelines:
   def test_pipeline_run_ocr(self,):
     """Tests for pipeline run with chunker overlap"""
     pipeline = Pipeline(
-        name='pipeline-ocr',
-        transformations=[
-            PDFPartition(
-                max_characters = 1024,ocr=True),
+        name='pipeline-ocr', transformations=[
+            PDFPartition(max_characters=1024, ocr=True),
         ])
     assert pipeline.transformations[0].strategy == 'ocr_only'

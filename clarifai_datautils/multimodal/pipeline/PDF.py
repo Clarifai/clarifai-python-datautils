@@ -18,7 +18,7 @@ class PDFPartition(BaseTransform):
                max_characters=MAX_CHARACTERS,
                overlap=None,
                overlap_all=True,
-               clarifai_ocr_model = None,
+               clarifai_ocr_model=None,
                **kwargs):
     """Initializes an PDFPartition object.
 
@@ -34,11 +34,11 @@ class PDFPartition(BaseTransform):
     if chunking_strategy not in ["basic", "by_title"]:
       raise ValueError("chunking_strategy should be either 'basic' or 'by_title'.")
     self.chunking_strategy = chunking_strategy
-    self.strategy = "ocr_only" if ocr else "fast"   #TODO: Add hi_res strategy
+    self.strategy = "ocr_only" if ocr else "fast"  #TODO: Add hi_res strategy
     self.max_characters = max_characters
     self.overlap = overlap
     self.overlap_all = overlap_all
-    self.clarifai_ocr_model = clarifai_ocr_model #TODO: Add check if its valid OCR model
+    self.clarifai_ocr_model = clarifai_ocr_model  #TODO: Add check if its valid OCR model
     self.kwargs = kwargs
 
   def __call__(self, elements: List[str]) -> List[str]:

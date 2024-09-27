@@ -1,3 +1,4 @@
-unstructured[all-docs]==0.14.4
+git+https://github.com/clarifai/unstructured.git@support_clarifai_model#egg=unstructured[pdf]
 llama-index-core==0.10.33
 llama-index-llms-clarifai==0.1.2
+pi_heif==0.18.0

@@ -1,3 +1,10 @@
+## [[0.0.4]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.4) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.4/) - 2024-10-04
+
+### Added
+- Multimodal loader support for PDFs [(#11)](https://github.com/Clarifai/clarifai-python-datautils/pull/11)
+- Ready to Use pipelines [(#16)](https://github.com/Clarifai/clarifai-python-datautils/pull/16)
+- Support for Clarifai OCR Models [(#17)](https://github.com/Clarifai/clarifai-python-datautils/pull/17)
+
 ## [[0.0.3]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.3) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.3/) - 2024-05-29
 
 ### Added

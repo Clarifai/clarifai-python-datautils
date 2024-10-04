@@ -4,7 +4,7 @@ import setuptools
 with open("README.md", "r") as fh:
   long_description = fh.read()
 
-with open("./clarifai/__init__.py") as f:
+with open("./clarifai_datautils/__init__.py") as f:
   content = f.read()
 _search_version = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', content)
 assert _search_version

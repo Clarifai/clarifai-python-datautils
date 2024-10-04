@@ -1,0 +1,2 @@
+recursive-include clarifai_datautils *
+include requirements.txt

@@ -10,12 +10,11 @@ _search_version = re.search(r'__version__\s*=\s*[\'"]([^\'"]*)[\'"]', content)
 assert _search_version
 version = _search_version.group(1)
 
-install_requires = [
-    'unstructured[pdf] @ git+https://github.com/clarifai/unstructured.git@support_clarifai_model',
-    'llama-index-core==0.10.33',
-    'llama-index-llms-clarifai==0.1.2',
-    'pi_heif==0.18.0'
-]
+with open("requirements.txt", "r") as fh:
+  install_requires = fh.read().split('\n')
+if install_requires and install_requires[-1] == '':
+  # Remove the last empty line
+  install_requires = install_requires[:-1]
 
 packages = setuptools.find_namespace_packages(include=["clarifai_datautils*"])
 

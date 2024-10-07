@@ -87,6 +87,14 @@ coco_dataset.export_to('voc_detection')
 
 
 ### Data Ingestion Pipelines
+
+#### Setup
+To use Data Ingestion Pipeline, please run
+```python
+pip install -r requirements-dev.txt
+```
+
+
 ```python
 from clarifai_datautils.text import Pipeline, PDFPartition
 from clarifai_datautils.text.pipeline.cleaners import Clean_extra_whitespace

@@ -1,8 +1,13 @@
 from typing import List
-
-from unstructured.chunking.basic import chunk_elements
-from unstructured.chunking.title import chunk_by_title
-from unstructured.partition.pdf import partition_pdf
+try:
+  from unstructured.chunking.basic import chunk_elements
+  from unstructured.chunking.title import chunk_by_title
+  from unstructured.partition.pdf import partition_pdf
+except ImportError:
+  raise ImportError(
+      "Could not import unstructured package. "
+      "Please install it with `pip install 'unstructured[pdf] @ git+https://github.com/clarifai/unstructured.git@support_clarifai_model'`."
+  )
 
 from clarifai_datautils.constants.pipeline import MAX_CHARACTERS
 

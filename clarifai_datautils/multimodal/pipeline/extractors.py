@@ -2,10 +2,16 @@ from typing import List
 
 from llama_index.core import Document
 from llama_index.core.node_parser import SentenceSplitter
-from unstructured.cleaners.extract import (extract_datetimetz, extract_email_address,
-                                           extract_ip_address, extract_ip_address_name,
-                                           extract_text_after, extract_text_before)
-from unstructured.documents.elements import Element, ElementMetadata
+try:
+  from unstructured.cleaners.extract import (extract_datetimetz, extract_email_address,
+                                             extract_ip_address, extract_ip_address_name,
+                                             extract_text_after, extract_text_before)
+  from unstructured.documents.elements import Element, ElementMetadata
+except ImportError:
+  raise ImportError(
+      "Could not import unstructured package. "
+      "Please install it with `pip install 'unstructured[pdf] @ git+https://github.com/clarifai/unstructured.git@support_clarifai_model'`."
+  )
 
 from clarifai_datautils.constants.pipeline import MAX_NODES, SKIP_NODES
 

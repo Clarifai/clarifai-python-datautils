@@ -8,6 +8,13 @@ Load text files(pdf, doc, etc..) , transform, chunk and upload to the Clarifai P
 - Metadata Extraction
 
 
+## Setup
+To use Data Ingestion Pipeline, please run
+```python
+pip install -r requirements-dev.txt
+```
+
+
 ## Usage
 
 ```python

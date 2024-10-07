@@ -1,9 +1,15 @@
 from typing import List
 
-from unstructured.cleaners.core import (
-    bytes_string_to_string, clean_bullets, clean_dashes, clean_extra_whitespace,
-    clean_non_ascii_chars, clean_ordered_bullets, clean_postfix, clean_prefix,
-    group_broken_paragraphs, remove_punctuation, replace_unicode_quotes)
+try:
+  from unstructured.cleaners.core import (
+      bytes_string_to_string, clean_bullets, clean_dashes, clean_extra_whitespace,
+      clean_non_ascii_chars, clean_ordered_bullets, clean_postfix, clean_prefix,
+      group_broken_paragraphs, remove_punctuation, replace_unicode_quotes)
+except ImportError:
+  raise ImportError(
+      "Could not import unstructured package. "
+      "Please install it with `pip install 'unstructured[pdf] @ git+https://github.com/clarifai/unstructured.git@support_clarifai_model'`."
+  )
 
 from .basetransform import BaseTransform
 

@@ -92,8 +92,8 @@ class Pipeline:
     try:
       from clarifai_datautils.multimodal.pipeline.custom_pipeline import Custom_Pipelines
     except Exception as e:
-      raise ImportError(f'cannot Import Custom_Pipelines') from e
-    
+      raise ImportError('cannot Import Custom_Pipelines') from e
+
     self.name = name
     self.custom_pipelines_map = {
         'basic_pdf': Custom_Pipelines.basic_pdf_pipeline(),

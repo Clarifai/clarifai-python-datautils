@@ -3,8 +3,6 @@ from typing import List, Type
 
 from tqdm import tqdm
 
-from clarifai_datautils.multimodal.pipeline.custom_pipeline import Custom_Pipelines
-
 from .basetransform import BaseTransform
 from .loaders import MultiModalLoader, TextDataLoader
 
@@ -91,6 +89,11 @@ class Pipeline:
         Pipeline object.
 
     """
+    try:
+      from clarifai_datautils.multimodal.pipeline.custom_pipeline import Custom_Pipelines
+    except Exception as e:
+      raise ImportError('cannot Import Custom_Pipelines') from e
+
     self.name = name
     self.custom_pipelines_map = {
         'basic_pdf': Custom_Pipelines.basic_pdf_pipeline(),

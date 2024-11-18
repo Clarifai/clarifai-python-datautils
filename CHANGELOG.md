@@ -1,11 +1,3 @@
-## [[0.0.5]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.5) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.5/) - 2024-11-18
-
-### Added
-- Debugging requirements for build [(#24)](https://github.com/Clarifai/clarifai-python-datautils/pull/24)
-- Initialize version 4 [(#25)](https://github.com/Clarifai/clarifai-python-datautils/pull/25)
-- Removed local dependency and added requirement-dev.txt [(#26)](https://github.com/Clarifai/clarifai-python-datautils/pull/26)
-- Moved imports into function [(#27)](https://github.com/Clarifai/clarifai-python-datautils/pull/27)
-
 ## [[0.0.4]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.4) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.4/) - 2024-10-04
 
 ### Added

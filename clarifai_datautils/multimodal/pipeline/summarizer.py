@@ -45,7 +45,7 @@ class ImageSummarizer(BaseTransform):
     """
     img_elements = []
     for _, element in enumerate(elements):
-      element.metadata.update(ElementMetadata.from_dict({'is_original': True}))
+      element.metadata.update(ElementMetadata.from_dict({'is_original': True, 'input_id': f'{random.randint(1000000, 99999999)}'}))
       if isinstance(element, Image):
         img_elements.append(element)
     # new_elements = Parallel(n_jobs=len(elements))(delayed(self._summarize_image)(element) for element in img_elements)
@@ -67,7 +67,8 @@ class ImageSummarizer(BaseTransform):
     for element in image_elements:
         if not isinstance(element, Image):
             continue
-        input_proto = Inputs.get_multimodal_input(input_id=f'{random.randint(1000000, 99999999)}', 
+        new_input_id = "summarize_" + element.metadata.input_id
+        input_proto = Inputs.get_multimodal_input(input_id=new_input_id, 
                                                image_bytes=base64.b64decode(element.metadata.image_base64), 
                                                raw_text=self.summary_prompt)
         img_inputs.append(input_proto)
@@ -79,8 +80,8 @@ class ImageSummarizer(BaseTransform):
         if image_elements[i].text:
             summary = image_elements[i].text
         summary = summary + " \n " +element.data.text.raw
-        eid =  image_elements[i].to_dict()['element_id']
-        meta_dict = {'source_element_id': eid, 'is_original': False}
+        eid =  image_elements[i].metadata.input_id
+        meta_dict = {'source_input_id': eid, 'is_original': False}
         comp_element = CompositeElement(text=summary, metadata=ElementMetadata.from_dict(meta_dict), element_id="summarized_" + eid)
         new_elements.append(comp_element)
     

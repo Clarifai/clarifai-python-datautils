@@ -89,9 +89,9 @@ class TestMultimodalPipelines:
     assert elements[0].metadata.to_dict()['email_address'] == ['test_extraction@gmail.com']
     assert elements[6].__class__.__name__ == 'Table'
     assert elements[-2].__class__.__name__ == 'Image'
-    assert elements[-2].metadata.is_original == True
+    assert elements[-2].metadata.is_original is True
     assert elements[-2].metadata.input_id is not None
     id = elements[-2].metadata.input_id
     assert elements[-1].__class__.__name__ == 'CompositeElement'
-    assert elements[-1].metadata.is_original == False
+    assert elements[-1].metadata.is_original is False
     assert elements[-1].metadata.source_input_id == 'summarized_' + id

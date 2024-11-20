@@ -1,21 +1,22 @@
-from typing import List
+import base64
 import os
 import random
-import base64
+from typing import List
 
 try:
-  from unstructured.documents.elements import ElementMetadata, Image, CompositeElement
+  from unstructured.documents.elements import CompositeElement, ElementMetadata, Image
 except ImportError:
   raise ImportError(
       "Could not import unstructured package. "
       "Please install it with `pip install 'unstructured[pdf] @ git+https://github.com/clarifai/unstructured.git@support_clarifai_model'`."
   )
 
-from clarifai_datautils.constants.pipeline import MAX_NODES, SKIP_NODES
-from clarifai.client.model import Model
 from clarifai.client.input import Inputs
+from clarifai.client.model import Model
+
 
 from .basetransform import BaseTransform
+
 
 class ImageSummarizer(BaseTransform):
   """ Summarizes image elements. """

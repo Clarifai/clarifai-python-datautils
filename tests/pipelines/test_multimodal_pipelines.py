@@ -1,12 +1,10 @@
 import os.path as osp
 
-import pytest
-
 PDF_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "Multimodal_sample_file.pdf"))
 
 
-@pytest.mark.skip(reason="Need additional build dependencies")
+# @pytest.mark.skip(reason="Need additional build dependencies")
 class TestMultimodalPipelines:
   """Tests for pipeline transformations."""
 
@@ -69,18 +67,19 @@ class TestMultimodalPipelines:
 
   def test_pipeline_summarize(self,):
     """Tests for pipeline run with summarizer"""
+    import os
+
     from clarifai_datautils.multimodal import Pipeline
     from clarifai_datautils.multimodal.pipeline.cleaners import Clean_extra_whitespace
     from clarifai_datautils.multimodal.pipeline.PDF import PDFPartitionMultimodal
     from clarifai_datautils.multimodal.pipeline.summarizer import ImageSummarizer
-    import os
 
     pipeline = Pipeline(
         name='pipeline-1',
         transformations=[
             PDFPartitionMultimodal(chunking_strategy="by_title", max_characters=1024),
             Clean_extra_whitespace(),
-            ImageSummarizer()
+            ImageSummarizer(pat=os.environ.get("CLARIFAI_PAT"))
         ])
     elements = pipeline.run(files=PDF_FILE_PATH, loader=False)
 

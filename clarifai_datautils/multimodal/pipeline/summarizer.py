@@ -1,5 +1,4 @@
 import base64
-import os
 import random
 from typing import List
 
@@ -16,46 +15,48 @@ from clarifai.client.model import Model
 
 from .basetransform import BaseTransform
 
+SUMMARY_PROMPT = """You are an assistant tasked with summarizing images for retrieval. \
+        These summaries will be embedded and used to retrieve the raw image. \
+        Give a concise summary of the image that is well optimized for retrieval."""
+
 
 class ImageSummarizer(BaseTransform):
   """ Summarizes image elements. """
 
-  def __init__(self, model_url="https://clarifai.com/qwen/qwen-VL/models/qwen-VL-Chat"):
-    """Initializes an LlamaIndexWrapper object.
+  def __init__(self,
+               pat,
+               model_url="https://clarifai.com/qwen/qwen-VL/models/qwen-VL-Chat",
+               prompt=SUMMARY_PROMPT):
+    """Initializes an ImageSummarizer object.
 
     Args:
+        pat (str): Clarifai PAT.
         model_url (str): Model URL to use for summarization.
-
+        prompt (str): Prompt to use for summarization.
     """
     self.model_url = model_url
-    self.model = Model(url=model_url, pat=os.environ.get("CLARIFAI_PAT"))
-    self.summary_prompt = """You are an assistant tasked with summarizing images for retrieval. \
-        These summaries will be embedded and used to retrieve the raw image. \
-        Give a concise summary of the image that is well optimized for retrieval."""
+    self.model = Model(url=model_url, pat=pat)
+    self.summary_prompt = prompt
 
   def __call__(self, elements: List) -> List:
     """Applies the transformation.
 
     Args:
-        elements (List[str]): List of text elements.
+        elements (List[str]): List of all elements.
 
     Returns:
-        List of transformed text elements.
+        List of transformed elements along with added summarized elements.
 
     """
     img_elements = []
     for _, element in enumerate(elements):
-      element.metadata.update(
-          ElementMetadata.from_dict({
-              'is_original': True
-          }))
+      element.metadata.update(ElementMetadata.from_dict({'is_original': True}))
       if isinstance(element, Image):
         element.metadata.update(
-          ElementMetadata.from_dict({
-              'input_id': f'{random.randint(1000000, 99999999)}'
-          }))
+            ElementMetadata.from_dict({
+                'input_id': f'{random.randint(1000000, 99999999)}'
+            }))
         img_elements.append(element)
-    # new_elements = Parallel(n_jobs=len(elements))(delayed(self._summarize_image)(element) for element in img_elements)
     new_elements = self._summarize_image(img_elements)
     elements.extend(new_elements)
     return elements
@@ -64,13 +65,13 @@ class ImageSummarizer(BaseTransform):
     """Summarizes an image element.
 
     Args:
-        image_element (Image): Image element to summarize.
+        image_elements (List[Image]): Image elements to summarize.
 
     Returns:
-        Summarized image element.
+        Summarized image elements list.
 
     """
-    img_inputs = [] 
+    img_inputs = []
     for element in image_elements:
       if not isinstance(element, Image):
         continue
@@ -81,6 +82,7 @@ class ImageSummarizer(BaseTransform):
           raw_text=self.summary_prompt)
       img_inputs.append(input_proto)
     resp = self.model.predict(img_inputs)
+    del img_inputs
 
     new_elements = []
     for i, output in enumerate(resp.outputs):

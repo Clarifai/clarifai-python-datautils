@@ -47,13 +47,16 @@ class ImageSummarizer(BaseTransform):
     for _, element in enumerate(elements):
       element.metadata.update(
           ElementMetadata.from_dict({
-              'is_original': True,
-              'input_id': f'{random.randint(1000000, 99999999)}'
+              'is_original': True
           }))
       if isinstance(element, Image):
+        element.metadata.update(
+          ElementMetadata.from_dict({
+              'input_id': f'{random.randint(1000000, 99999999)}'
+          }))
         img_elements.append(element)
     # new_elements = Parallel(n_jobs=len(elements))(delayed(self._summarize_image)(element) for element in img_elements)
-    new_elements = self._summarize_image(elements)
+    new_elements = self._summarize_image(img_elements)
     elements.extend(new_elements)
     return elements
 
@@ -67,7 +70,7 @@ class ImageSummarizer(BaseTransform):
         Summarized image element.
 
     """
-    img_inputs = []
+    img_inputs = [] 
     for element in image_elements:
       if not isinstance(element, Image):
         continue
@@ -80,11 +83,11 @@ class ImageSummarizer(BaseTransform):
     resp = self.model.predict(img_inputs)
 
     new_elements = []
-    for i, element in enumerate(resp.outputs):
+    for i, output in enumerate(resp.outputs):
       summary = ""
       if image_elements[i].text:
         summary = image_elements[i].text
-      summary = summary + " \n " + element.data.text.raw
+      summary = summary + " \n " + output.data.text.raw
       eid = image_elements[i].metadata.input_id
       meta_dict = {'source_input_id': eid, 'is_original': False}
       comp_element = CompositeElement(

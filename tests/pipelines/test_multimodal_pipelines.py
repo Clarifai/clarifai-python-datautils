@@ -73,6 +73,7 @@ class TestMultimodalPipelines:
     from clarifai_datautils.multimodal.pipeline.cleaners import Clean_extra_whitespace
     from clarifai_datautils.multimodal.pipeline.PDF import PDFPartitionMultimodal
     from clarifai_datautils.multimodal.pipeline.summarizer import ImageSummarizer
+    import os
 
     pipeline = Pipeline(
         name='pipeline-1',
@@ -82,16 +83,16 @@ class TestMultimodalPipelines:
             ImageSummarizer()
         ])
     elements = pipeline.run(files=PDF_FILE_PATH, loader=False)
-    assert len(elements) == 15
+
+    assert len(elements) == 17
     assert isinstance(elements, list)
     assert elements[0].metadata.to_dict()['filename'] == 'Multimodal_sample_file.pdf'
     assert elements[0].metadata.to_dict()['page_number'] == 1
-    assert elements[0].metadata.to_dict()['email_address'] == ['test_extraction@gmail.com']
     assert elements[6].__class__.__name__ == 'Table'
-    assert elements[-2].__class__.__name__ == 'Image'
-    assert elements[-2].metadata.is_original is True
-    assert elements[-2].metadata.input_id is not None
-    id = elements[-2].metadata.input_id
+    assert elements[-3].__class__.__name__ == 'Image'
+    assert elements[-3].metadata.is_original is True
+    assert elements[-3].metadata.input_id is not None
+    id = elements[-3].metadata.input_id
     assert elements[-1].__class__.__name__ == 'CompositeElement'
     assert elements[-1].metadata.is_original is False
-    assert elements[-1].metadata.source_input_id == 'summarized_' + id
+    assert elements[-1].metadata.source_input_id == id

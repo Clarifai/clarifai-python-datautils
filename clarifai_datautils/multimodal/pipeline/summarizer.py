@@ -14,7 +14,6 @@ except ImportError:
 from clarifai.client.input import Inputs
 from clarifai.client.model import Model
 
-
 from .basetransform import BaseTransform
 
 
@@ -46,14 +45,18 @@ class ImageSummarizer(BaseTransform):
     """
     img_elements = []
     for _, element in enumerate(elements):
-      element.metadata.update(ElementMetadata.from_dict({'is_original': True, 'input_id': f'{random.randint(1000000, 99999999)}'}))
+      element.metadata.update(
+          ElementMetadata.from_dict({
+              'is_original': True,
+              'input_id': f'{random.randint(1000000, 99999999)}'
+          }))
       if isinstance(element, Image):
         img_elements.append(element)
     # new_elements = Parallel(n_jobs=len(elements))(delayed(self._summarize_image)(element) for element in img_elements)
     new_elements = self._summarize_image(elements)
     elements.extend(new_elements)
     return elements
-  
+
   def _summarize_image(self, image_elements: List[Image]) -> List[CompositeElement]:
     """Summarizes an image element.
 
@@ -66,24 +69,28 @@ class ImageSummarizer(BaseTransform):
     """
     img_inputs = []
     for element in image_elements:
-        if not isinstance(element, Image):
-            continue
-        new_input_id = "summarize_" + element.metadata.input_id
-        input_proto = Inputs.get_multimodal_input(input_id=new_input_id, 
-                                               image_bytes=base64.b64decode(element.metadata.image_base64), 
-                                               raw_text=self.summary_prompt)
-        img_inputs.append(input_proto)
+      if not isinstance(element, Image):
+        continue
+      new_input_id = "summarize_" + element.metadata.input_id
+      input_proto = Inputs.get_multimodal_input(
+          input_id=new_input_id,
+          image_bytes=base64.b64decode(element.metadata.image_base64),
+          raw_text=self.summary_prompt)
+      img_inputs.append(input_proto)
     resp = self.model.predict(img_inputs)
 
     new_elements = []
     for i, element in enumerate(resp.outputs):
-        summary = ""
-        if image_elements[i].text:
-            summary = image_elements[i].text
-        summary = summary + " \n " +element.data.text.raw
-        eid =  image_elements[i].metadata.input_id
-        meta_dict = {'source_input_id': eid, 'is_original': False}
-        comp_element = CompositeElement(text=summary, metadata=ElementMetadata.from_dict(meta_dict), element_id="summarized_" + eid)
-        new_elements.append(comp_element)
-    
+      summary = ""
+      if image_elements[i].text:
+        summary = image_elements[i].text
+      summary = summary + " \n " + element.data.text.raw
+      eid = image_elements[i].metadata.input_id
+      meta_dict = {'source_input_id': eid, 'is_original': False}
+      comp_element = CompositeElement(
+          text=summary,
+          metadata=ElementMetadata.from_dict(meta_dict),
+          element_id="summarized_" + eid)
+      new_elements.append(comp_element)
+
     return new_elements

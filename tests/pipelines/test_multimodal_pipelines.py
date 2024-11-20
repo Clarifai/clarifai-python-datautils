@@ -4,7 +4,7 @@ PDF_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "Multimodal_sample_file.pdf"))
 
 
-# @pytest.mark.skip(reason="Need additional build dependencies")
+@pytest.mark.skip(reason="Need additional build dependencies")
 class TestMultimodalPipelines:
   """Tests for pipeline transformations."""
 

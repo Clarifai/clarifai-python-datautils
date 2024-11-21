@@ -24,9 +24,9 @@ class ImageSummarizer(BaseTransform):
   """ Summarizes image elements. """
 
   def __init__(self,
-               pat,
-               model_url="https://clarifai.com/qwen/qwen-VL/models/qwen-VL-Chat",
-               prompt=SUMMARY_PROMPT):
+               model_url: str = "https://clarifai.com/qwen/qwen-VL/models/qwen-VL-Chat",
+               pat: str = None,
+               prompt: str = SUMMARY_PROMPT):
     """Initializes an ImageSummarizer object.
 
     Args:
@@ -34,6 +34,7 @@ class ImageSummarizer(BaseTransform):
         model_url (str): Model URL to use for summarization.
         prompt (str): Prompt to use for summarization.
     """
+    self.pat = pat
     self.model_url = model_url
     self.model = Model(url=model_url, pat=pat)
     self.summary_prompt = prompt

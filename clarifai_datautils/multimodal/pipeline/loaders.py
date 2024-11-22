@@ -27,6 +27,7 @@ class MultiModalLoader(ClarifaiDataLoader):
     meta.pop('coordinates', None)
     meta.pop('detection_class_prob', None)
     image_data = meta.pop('image_base64', None)
+    id = meta.get('input_id', None)
     if image_data is not None:
       # Ensure image_data is already bytes before encoding
       image_data = base64.b64decode(image_data)
@@ -39,7 +40,7 @@ class MultiModalLoader(ClarifaiDataLoader):
       meta['type'] = 'table'
 
     return MultiModalFeatures(
-        text=text, image_bytes=image_data, labels=[self.pipeline_name], metadata=meta)
+        text=text, image_bytes=image_data, labels=[self.pipeline_name], metadata=meta, id=id)
 
   def __len__(self):
     return len(self.elements)
@@ -61,10 +62,13 @@ class TextDataLoader(ClarifaiDataLoader):
     return DATASET_UPLOAD_TASKS.TEXT_CLASSIFICATION  #TODO: Better dataset name in SDK
 
   def __getitem__(self, index: int):
+    id = self.elements[index].to_dict().get('element_id', None)
+    id = id[:48] if id is not None else None
     return TextFeatures(
         text=self.elements[index].text,
         labels=self.pipeline_name,
-        metadata=self.elements[index].metadata.to_dict())
+        metadata=self.elements[index].metadata.to_dict(),
+        id=id)
 
   def __len__(self):
     return len(self.elements)

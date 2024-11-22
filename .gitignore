@@ -51,6 +51,9 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+testing/*
+!testing/test.ipynb
+
 # Translations
 *.mo
 *.pot

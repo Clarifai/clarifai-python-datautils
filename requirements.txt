@@ -1,3 +1,5 @@
 llama-index-core==0.10.33
 llama-index-llms-clarifai==0.1.2
 pi_heif==0.18.0
+markdown==3.7
+python-docx==1.1.2

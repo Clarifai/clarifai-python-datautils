@@ -1,6 +1,6 @@
 from typing import List
 try:
-  from unstructured.partition.text import partition_text
+  from unstructured.partition.docx import partition_docx
 except ImportError:
   raise ImportError(
       "Could not import unstructured package. "
@@ -12,8 +12,8 @@ from clarifai_datautils.constants.pipeline import MAX_CHARACTERS
 from .basetransform import BaseTransform
 
 
-class TextPartition(BaseTransform):
-  """Partitions Text file into text elements."""
+class DocxPartition(BaseTransform):
+  """Partitions Docx file into text elements."""
 
   def __init__(self,
                chunking_strategy: str = "basic",
@@ -21,7 +21,7 @@ class TextPartition(BaseTransform):
                overlap=None,
                overlap_all=True,
                **kwargs):
-    """Initializes an PDFPartition object.
+    """Initializes an DocxPartition object.
 
     Args:
         chunking_strategy (str): Chunking strategy to use.
@@ -51,7 +51,7 @@ class TextPartition(BaseTransform):
     """
     file_elements = []
     for filename in elements:
-      file_element = partition_text(
+      file_element = partition_docx(
           filename=filename,
           chunking_strategy=self.chunking_strategy,
           max_characters=self.max_characters,

@@ -1,8 +1,10 @@
 from clarifai_datautils.constants.pipeline import *  # noqa: F403
 from clarifai_datautils.multimodal.pipeline.cleaners import (Clean_extra_whitespace,
                                                              Group_broken_paragraphs)
+from clarifai_datautils.multimodal.pipeline.Docx import DocxPartition
 from clarifai_datautils.multimodal.pipeline.extractors import (ExtractDateTimeTz,
                                                                ExtractEmailAddress)
+from clarifai_datautils.multimodal.pipeline.Markdown import MarkdownPartition
 from clarifai_datautils.multimodal.pipeline.PDF import PDFPartition
 from clarifai_datautils.multimodal.pipeline.Text import TextPartition
 
@@ -44,6 +46,20 @@ class Custom_Pipelines:
   def standard_text_pipeline():
     return [
         TextPartition(max_characters=1024, overlap=None),
+        Clean_extra_whitespace(),
+        Group_broken_paragraphs(),
+    ]
+
+  def standard_docx_pipeline():
+    return [
+        DocxPartition(max_characters=1024, overlap=None),
+        Clean_extra_whitespace(),
+        Group_broken_paragraphs(),
+    ]
+
+  def standard_markdown_pipeline():
+    return [
+        MarkdownPartition(max_characters=1024, overlap=None),
         Clean_extra_whitespace(),
         Group_broken_paragraphs(),
     ]

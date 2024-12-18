@@ -1,3 +1,8 @@
+## [[0.0.6]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.6) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.6/) - 2024-12-18
+
+### Added
+- Added image summarization in multimodal pipeline [(#31)](https://github.com/Clarifai/clarifai-python-datautils/pull/31)
+
 ## [[0.0.5]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.5) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.5/) - 2024-11-18
 
 ### Added

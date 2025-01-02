@@ -45,7 +45,7 @@ class VisualSegmentationFeatures:
 class TextFeatures:
   """Text classification datasets preprocessing output features."""
   text: str
-  labels: List[Union[str, int]]  # List[str or int] to cater for multi-class tasks
+  labels: List[Union[str, int]] = None  # List[str or int] to cater for multi-class tasks
   id: Optional[int] = None  # text_id
   metadata: Optional[dict] = None
   label_ids: Optional[List[str]] = None

@@ -39,8 +39,7 @@ class MultiModalLoader(ClarifaiDataLoader):
     if self.elements[index].to_dict()['type'] == 'Table':
       meta['type'] = 'table'
 
-    return MultiModalFeatures(
-        text=text, image_bytes=image_data, labels=[self.pipeline_name], metadata=meta, id=id)
+    return MultiModalFeatures(text=text, image_bytes=image_data, metadata=meta, id=id)
 
   def __len__(self):
     return len(self.elements)
@@ -65,10 +64,7 @@ class TextDataLoader(ClarifaiDataLoader):
     id = self.elements[index].to_dict().get('element_id', None)
     id = id[:48] if id is not None else None
     return TextFeatures(
-        text=self.elements[index].text,
-        labels=self.pipeline_name,
-        metadata=self.elements[index].metadata.to_dict(),
-        id=id)
+        text=self.elements[index].text, metadata=self.elements[index].metadata.to_dict(), id=id)
 
   def __len__(self):
     return len(self.elements)

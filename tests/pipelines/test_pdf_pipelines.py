@@ -32,7 +32,8 @@ class TestPDFPipelines:
         ])
     elements = pipeline.run(files=PDF_FILE_PATH)
     assert len(elements) == 3
-    assert elements[0].text[:9] == 'MAIN GAME'
+    assert (elements[0].text[:9] == 'MAIN GAME') and (
+        elements[1].text[1:12] == 'Transcribed') and (elements[2].text[:10] == 'Thankfully')
     assert elements[0].metadata['filename'] == 'DA-1p.pdf'
     assert elements[0].metadata['page_number'] == 1
     assert elements[0].metadata['text_after'] == 'our assault."'

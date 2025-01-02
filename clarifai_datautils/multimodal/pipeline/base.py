@@ -102,6 +102,8 @@ class Pipeline:
         'ocr_pdf': Custom_Pipelines.ocr_pdf_pipeline(),
         'structured_pdf': Custom_Pipelines.structured_pdf_pipeline(),
         'standard_text': Custom_Pipelines.standard_text_pipeline(),
+        'standard_docx': Custom_Pipelines.standard_docx_pipeline(),
+        'standard_markdown': Custom_Pipelines.standard_markdown_pipeline(),
     }
     try:
       if self.name in self.custom_pipelines_map:

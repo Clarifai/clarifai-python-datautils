@@ -36,7 +36,8 @@ class TestPDFPipelines:
         ])
     elements = pipeline.run(files=TEXT_FILE_PATH)
     assert len(elements) == 4
-    assert elements[0].text[:9] == 'CHAPTER I'
+    assert (elements[0].text[:9] == 'CHAPTER I') and (elements[1].text[:3] == 'All') and (
+        elements[2].text[1:6] == 'First') and (elements[3].text[1:5] == 'What')
     assert elements[0].metadata['filename'] == 'book-war-and-peace-1p.txt'
     assert elements[0].metadata['text_after'] == 'used only by the elite.'
 

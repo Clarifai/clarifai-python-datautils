@@ -59,3 +59,21 @@ class TestReadyToUsePipelines:
     assert pipeline.transformations[0].__class__.__name__ == 'TextPartition'
     assert pipeline.transformations[1].__class__.__name__ == 'Clean_extra_whitespace'
     assert pipeline.transformations[2].__class__.__name__ == 'Group_broken_paragraphs'
+
+  def test_pipeline_standard_docx(self,):
+    """Tests for standard docx pipeline"""
+    pipeline = Pipeline.load(name='standard_docx')
+    assert pipeline.name == 'standard_docx'
+    assert len(pipeline.transformations) == 3
+    assert pipeline.transformations[0].__class__.__name__ == 'DocxPartition'
+    assert pipeline.transformations[1].__class__.__name__ == 'Clean_extra_whitespace'
+    assert pipeline.transformations[2].__class__.__name__ == 'Group_broken_paragraphs'
+
+  def test_pipeline_standard_markdown(self,):
+    """Tests for standard markdown pipeline"""
+    pipeline = Pipeline.load(name='standard_markdown')
+    assert pipeline.name == 'standard_markdown'
+    assert len(pipeline.transformations) == 3
+    assert pipeline.transformations[0].__class__.__name__ == 'MarkdownPartition'
+    assert pipeline.transformations[1].__class__.__name__ == 'Clean_extra_whitespace'
+    assert pipeline.transformations[2].__class__.__name__ == 'Group_broken_paragraphs'

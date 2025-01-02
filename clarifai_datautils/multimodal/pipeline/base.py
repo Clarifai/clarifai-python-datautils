@@ -1,4 +1,5 @@
 import os
+from concurrent.futures import ThreadPoolExecutor
 from typing import List, Type
 
 from tqdm import tqdm
@@ -34,7 +35,8 @@ class Pipeline:
           files: str = None,
           folder: str = None,
           show_progress: bool = True,
-          loader: bool = True):
+          loader: bool = True,
+          num_workers: int = 4):
     """Runs the Data Ingestion pipeline.
 
     Args:
@@ -42,6 +44,7 @@ class Pipeline:
         folder (str): Folder containing the files.
         show_progress (bool): Whether to show progress bar.
         loader (bool): Whether to return a Clarifai Dataloader Object to pass to SDK Dataset Upload Functionality.
+        num_workers (int): Number of workers to use for parallel processing.
 
     Returns:
         List of transformed elements or ClarifaiDataLoader object.
@@ -57,22 +60,31 @@ class Pipeline:
 
     # Get files
     if files is not None:
-      self.elements = [files] if isinstance(files, str) else files
-      assert isinstance(self.elements, list), ' Files should be a list of strings.'
+      all_files = [files] if isinstance(files, str) else files
+      assert isinstance(all_files, list), 'Files should be a list of strings.'
     elif folder is not None:
-      self.elements = [os.path.join(folder, f) for f in os.listdir(folder)]
+      all_files = [os.path.join(folder, f) for f in os.listdir(folder)]
+
+    self.elements = []
 
     # Apply transformations
-    #TODO: num_workers support
-    if show_progress:
-      with tqdm(total=len(self.transformations), desc='Applying Transformations') as progress:
-        for transform in self.transformations:
-          self.elements = transform(self.elements)
-          progress.update()
-
-    else:
+    def transform_file(file_elements):
       for transform in self.transformations:
-        self.elements = transform(self.elements)
+        file_elements = transform(file_elements)
+      self.elements.extend(file_elements)
+
+    # num_workers support
+    with ThreadPoolExecutor(max_workers=num_workers) as executor:
+      if show_progress:
+        with tqdm(total=len(all_files), desc='Transforming Files') as progress:
+          futures = [executor.submit(transform_file, [file]) for file in all_files]
+          for job in futures:
+            job.result()
+            progress.update()
+      else:
+        futures = [executor.submit(transform_file, [file]) for file in all_files]
+        for job in futures:
+          job.result()
 
     if loader:
       if self.transformations[0].__class__.__name__ == 'PDFPartitionMultimodal':

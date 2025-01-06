@@ -1,11 +1,27 @@
 import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Type
+from schema import And, Schema
 
 from tqdm import tqdm
 
 from .basetransform import BaseTransform
 from .loaders import MultiModalLoader, TextDataLoader
+
+
+def get_schema() -> Schema:
+  """Initialize the schema for Data Ingestion Pipeline transformations.
+
+        This schema validates:
+
+        - transformations must be a list
+        - First item in the list must be one of the following: PDFPartition, TextPartition, PDFPartitionMultimodal, DocxPartition, MarkdownPartition
+        - Each item in the list must be of BaseTransform instance
+
+        Returns:
+            Schema: The schema for transformations.
+        """
+  return Schema(And(list, lambda x: x[0].__class__.__name__ in ['PDFPartition', 'TextPartition', 'PDFPartitionMultimodal', 'DocxPartition', 'MarkdownPartition'], lambda x: all(isinstance(item, BaseTransform) for item in x)), error="Invalid transformations data.")
 
 
 class Pipeline:
@@ -25,11 +41,8 @@ class Pipeline:
     """
     self.name = name
     self.transformations = transformations
-    for transform in self.transformations:
-      if not isinstance(transform, BaseTransform):
-        raise ValueError('All transformations should be of type BaseTransform.')
-
-    #TODO: Schema for transformations
+    self.transformation_schema = get_schema()
+    self.transformation_schema.validate(self.transformations)
 
   def run(self,
           files: str = None,

@@ -1,10 +1,28 @@
 import os.path as osp
+from typing import List
 
-from clarifai_datautils.multimodal import Pipeline
+import pytest
+from schema import SchemaError
+
+from clarifai_datautils.multimodal import PDFPartition, Pipeline
+from clarifai_datautils.multimodal.pipeline.cleaners import Clean_extra_whitespace
+from clarifai_datautils.multimodal.pipeline.extractors import (ExtractDateTimeTz,
+                                                               ExtractEmailAddress)
 
 PDF_FILE_PATH = osp.abspath(osp.join(osp.dirname(__file__), "assets", "DA-1p.pdf"))
 TEXT_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "book-war-and-peace-1p.txt"))
+
+
+class Test_transformation():
+
+  def __init__(self):
+    pass
+
+  def __call__(self,) -> List:
+    """Applies the transformation.
+    """
+    pass
 
 
 class TestReadyToUsePipelines:
@@ -77,3 +95,38 @@ class TestReadyToUsePipelines:
     assert pipeline.transformations[0].__class__.__name__ == 'MarkdownPartition'
     assert pipeline.transformations[1].__class__.__name__ == 'Clean_extra_whitespace'
     assert pipeline.transformations[2].__class__.__name__ == 'Group_broken_paragraphs'
+
+  def test_schema_error(self):
+    # Incorrect type of transformations object
+    with pytest.raises(SchemaError):
+      _ = Pipeline(
+          name='test-1',
+          transformations=(
+              PDFPartition(max_characters=1024, overlap=None),
+              Clean_extra_whitespace(),
+              ExtractDateTimeTz(),
+              ExtractEmailAddress(),
+          ))
+
+    # Incorrect First transformation
+    with pytest.raises(SchemaError):
+      _ = Pipeline(
+          name='test-2',
+          transformations=[
+              Clean_extra_whitespace(),
+              PDFPartition(max_characters=1024, overlap=None),
+              ExtractDateTimeTz(),
+              ExtractEmailAddress(),
+          ])
+
+    # Incorrect Instance of transformation
+    with pytest.raises(SchemaError):
+      _ = Pipeline(
+          name='test-3',
+          transformations=[
+              PDFPartition(max_characters=1024, overlap=None),
+              Clean_extra_whitespace(),
+              ExtractDateTimeTz(),
+              ExtractEmailAddress(),
+              Test_transformation(),
+          ])

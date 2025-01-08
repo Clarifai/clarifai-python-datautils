@@ -15,9 +15,10 @@ from clarifai.client.model import Model
 
 from .basetransform import BaseTransform
 
-SUMMARY_PROMPT = """You are an assistant tasked with summarizing images for retrieval. \
-        These summaries will be embedded and used to retrieve the raw image. \
-        Give a concise summary of the image that is well optimized for retrieval."""
+SUMMARY_PROMPT = """You are an assistant tasked with summarizing images for retrieval.
+        These summaries will be embedded and used to retrieve the raw image.
+        Give a concise summary of the image that is well optimized for retrieval.
+        Also add relevant keywords that can be used for search. """
 
 
 class ImageSummarizer(BaseTransform):
@@ -26,7 +27,8 @@ class ImageSummarizer(BaseTransform):
   def __init__(self,
                model_url: str = "https://clarifai.com/qwen/qwen-VL/models/qwen-VL-Chat",
                pat: str = None,
-               prompt: str = SUMMARY_PROMPT):
+               prompt: str = SUMMARY_PROMPT,
+               batch_size: int = 4):
     """Initializes an ImageSummarizer object.
 
     Args:
@@ -38,6 +40,7 @@ class ImageSummarizer(BaseTransform):
     self.model_url = model_url
     self.model = Model(url=model_url, pat=pat)
     self.summary_prompt = prompt
+    self.batch_size = batch_size
 
   def __call__(self, elements: List) -> List:
     """Applies the transformation.
@@ -72,31 +75,35 @@ class ImageSummarizer(BaseTransform):
         Summarized image elements list.
 
     """
-    img_inputs = []
-    for element in image_elements:
-      if not isinstance(element, Image):
-        continue
-      new_input_id = "summarize_" + element.metadata.input_id
-      input_proto = Inputs.get_multimodal_input(
-          input_id=new_input_id,
-          image_bytes=base64.b64decode(element.metadata.image_base64),
-          raw_text=self.summary_prompt)
-      img_inputs.append(input_proto)
-    resp = self.model.predict(img_inputs)
-    del img_inputs
+    image_summary = []
+    try:
+      for i in range(0, len(image_elements), self.batch_size):
+        batch = image_elements[i : i+self.batch_size]
+        
+        input_proto = [Inputs.get_multimodal_input(
+                        input_id=batch[id].metadata.input_id,
+                        image_bytes=base64.b64decode(batch[id].metadata.image_base64),
+                        raw_text=self.summary_prompt
+                    )
+                    for id in range(len(batch))
+                    if isinstance(batch[id], Image)
+        ]
+        resp = self.model.predict(input_proto)
+        for i, output in enumerate(resp.outputs):
+          summary = ""
+          if image_elements[i].text:
+            summary = image_elements[i].text
+          summary = summary + " \n " + output.data.text.raw
+          eid = batch[i].metadata.input_id
+          meta_dict = {'source_input_id': eid, 'is_original': False,
+                       'image_summary':'yes'}
+          comp_element = CompositeElement(
+              text=summary,
+              metadata=ElementMetadata.from_dict(meta_dict),
+              element_id="summarized_" + eid)
+          image_summary.append(comp_element)
 
-    new_elements = []
-    for i, output in enumerate(resp.outputs):
-      summary = ""
-      if image_elements[i].text:
-        summary = image_elements[i].text
-      summary = summary + " \n " + output.data.text.raw
-      eid = image_elements[i].metadata.input_id
-      meta_dict = {'source_input_id': eid, 'is_original': False}
-      comp_element = CompositeElement(
-          text=summary,
-          metadata=ElementMetadata.from_dict(meta_dict),
-          element_id="summarized_" + eid)
-      new_elements.append(comp_element)
-
-    return new_elements
+    except Exception as e:
+      raise e
+    
+    return image_summary

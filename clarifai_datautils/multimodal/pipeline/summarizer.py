@@ -78,15 +78,14 @@ class ImageSummarizer(BaseTransform):
     image_summary = []
     try:
       for i in range(0, len(image_elements), self.batch_size):
-        batch = image_elements[i : i+self.batch_size]
-        
-        input_proto = [Inputs.get_multimodal_input(
-                        input_id=batch[id].metadata.input_id,
-                        image_bytes=base64.b64decode(batch[id].metadata.image_base64),
-                        raw_text=self.summary_prompt
-                    )
-                    for id in range(len(batch))
-                    if isinstance(batch[id], Image)
+        batch = image_elements[i:i + self.batch_size]
+
+        input_proto = [
+            Inputs.get_multimodal_input(
+                input_id=batch[id].metadata.input_id,
+                image_bytes=base64.b64decode(batch[id].metadata.image_base64),
+                raw_text=self.summary_prompt) for id in range(len(batch))
+            if isinstance(batch[id], Image)
         ]
         resp = self.model.predict(input_proto)
         for i, output in enumerate(resp.outputs):
@@ -95,8 +94,7 @@ class ImageSummarizer(BaseTransform):
             summary = image_elements[i].text
           summary = summary + " \n " + output.data.text.raw
           eid = batch[i].metadata.input_id
-          meta_dict = {'source_input_id': eid, 'is_original': False,
-                       'image_summary':'yes'}
+          meta_dict = {'source_input_id': eid, 'is_original': False, 'image_summary': 'yes'}
           comp_element = CompositeElement(
               text=summary,
               metadata=ElementMetadata.from_dict(meta_dict),
@@ -105,5 +103,5 @@ class ImageSummarizer(BaseTransform):
 
     except Exception as e:
       raise e
-    
+
     return image_summary

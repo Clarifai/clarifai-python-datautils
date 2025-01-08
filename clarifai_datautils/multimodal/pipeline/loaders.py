@@ -1,4 +1,5 @@
 import base64
+import uuid
 
 from clarifai_datautils.constants.base import DATASET_UPLOAD_TASKS
 
@@ -27,7 +28,10 @@ class MultiModalLoader(ClarifaiDataLoader):
     meta.pop('coordinates', None)
     meta.pop('detection_class_prob', None)
     image_data = meta.pop('image_base64', None)
-    id = meta.get('input_id', None)
+    try:
+      id = self.elements[index].element_id[:8]
+    except (IndexError, AttributeError, TypeError):
+      id = str(uuid.uuid4())[:8]
     if image_data is not None:
       # Ensure image_data is already bytes before encoding
       image_data = base64.b64decode(image_data)
@@ -39,7 +43,8 @@ class MultiModalLoader(ClarifaiDataLoader):
     if self.elements[index].to_dict()['type'] == 'Table':
       meta['type'] = 'table'
 
-    return MultiModalFeatures(text=text, image_bytes=image_data, metadata=meta, id=id)
+    return MultiModalFeatures(
+        text=text, image_bytes=image_data, labels=[self.pipeline_name], metadata=meta, id=id)
 
   def __len__(self):
     return len(self.elements)
@@ -64,7 +69,10 @@ class TextDataLoader(ClarifaiDataLoader):
     id = self.elements[index].to_dict().get('element_id', None)
     id = id[:48] if id is not None else None
     return TextFeatures(
-        text=self.elements[index].text, metadata=self.elements[index].metadata.to_dict(), id=id)
+        text=self.elements[index].text,
+        labels=self.pipeline_name,
+        metadata=self.elements[index].metadata.to_dict(),
+        id=id)
 
   def __len__(self):
     return len(self.elements)

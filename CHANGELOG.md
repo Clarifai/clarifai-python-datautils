@@ -1,3 +1,8 @@
+## [[0.0.7]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.7) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.7/) - 2025-01-09
+
+### Fixed
+- Added batch predict for Imagesummarizer [(#36)](https://github.com/Clarifai/clarifai-python-datautils/pull/36)
+
 ## [[0.0.6]](https://github.com/Clarifai/clarifai-python-datautils/releases/tag/0.0.6) - [PyPI](https://pypi.org/project/clarifai-datautils/0.0.6/) - 2024-12-18
 
 ### Added

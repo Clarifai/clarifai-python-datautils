@@ -1,12 +1,16 @@
 # Annotation Loader
 
-A framework to load,export and analyze different annotated datasets
+A framework to load, export and analyze different annotated datasets
+
+
+## Setup
+To use Image Annotation Loader, please install the extra libs required for `annotations`
 
 
 ## Usage
 ### Features
 ```python
-from clarifai_datautils import ImageAnnotations
+from clarifai_datautils.image import ImageAnnotations
 #import from folder
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
@@ -21,7 +25,8 @@ coco_dataset.export_to('voc_detection')
 
 ### Upload using Clarifai Python SDK
 ```python
-from clarifai_datautils import ImageAnnotations
+from clarifai_datautils.image import ImageAnnotations
+#import from folder
 coco_dataset = ImageAnnotations.import_from(path='folder_path',format= 'coco_detection')
 
 #clarifai SDK
@@ -35,7 +40,6 @@ dataset.upload_dataset(dataloader=coco_dataset.dataloader)
 
 ### Export to other formats from Clarifai Platform
 ```python
-
 #clarifai SDK
 #export CLARIFAI_PAT={your personal access token}  # set PAT as env variable
 from clarifai.client.dataset import Dataset
@@ -43,7 +47,7 @@ dataset = Dataset(user_id="user_id", app_id="app_id", dataset_id="dataset_id")
 dataset.export(save_path='output.zip',split='train')
 
 #Extract the zip file and pass the folder to ImageAnnotations
-from clarifai_datautils import ImageAnnotations
+from clarifai_datautils.image import ImageAnnotations
 clarifai_dataset = ImageAnnotations.import_from(path='folder_path',format= 'clarifai')
 
 #export to other formats

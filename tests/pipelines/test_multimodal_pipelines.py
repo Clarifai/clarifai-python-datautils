@@ -1,4 +1,5 @@
 import os.path as osp
+import pytest
 
 PDF_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "Multimodal_sample_file.pdf"))

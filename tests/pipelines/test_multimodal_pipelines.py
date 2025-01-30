@@ -5,7 +5,6 @@ PDF_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "Multimodal_sample_file.pdf"))
 
 
-@pytest.mark.skip(reason="Need additional build dependencies")
 class TestMultimodalPipelines:
   """Tests for pipeline transformations."""
 
@@ -66,6 +65,7 @@ class TestMultimodalPipelines:
     assert len(elements) == 14
     assert elements.elements[0].metadata.to_dict()['filename'] == 'Multimodal_sample_file.pdf'
 
+  @pytest.mark.skip(reason="Need additional setup")
   def test_pipeline_summarize(self,):
     """Tests for pipeline run with summarizer"""
     import os

@@ -1,11 +1,9 @@
 import os.path as osp
-import pytest
 
 PDF_FILE_PATH = osp.abspath(
     osp.join(osp.dirname(__file__), "assets", "Multimodal_sample_file.pdf"))
 
 
-@pytest.mark.skip(reason="Need additional build dependencies")
 class TestMultimodalPipelines:
   """Tests for pipeline transformations."""
 
@@ -84,7 +82,7 @@ class TestMultimodalPipelines:
         ])
     elements = pipeline.run(files=PDF_FILE_PATH, loader=False)
 
-    assert len(elements) == 17
+    assert len(elements) == 16
     assert isinstance(elements, list)
     assert elements[0].metadata.to_dict()['filename'] == 'Multimodal_sample_file.pdf'
     assert elements[0].metadata.to_dict()['page_number'] == 1

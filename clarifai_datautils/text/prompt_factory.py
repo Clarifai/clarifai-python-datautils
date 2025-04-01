@@ -1,4 +1,4 @@
-# This was taken from litellm
+# This was inspired from litellm
 
 import json
 from enum import Enum

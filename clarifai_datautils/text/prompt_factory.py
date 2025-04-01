@@ -2,7 +2,7 @@
 
 import json
 from enum import Enum
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import requests
 from jinja2.sandbox import ImmutableSandboxedEnvironment
@@ -381,8 +381,8 @@ def gemini_text_image_pt(messages: list):
 
 def hf_chat_template(model: str,
                      messages: list,
-                     hf_token: str,
-                     chat_template: Optional[Any] = None) -> List[str, Any]:
+                     hf_token: Optional[str] = None,
+                     chat_template: Optional[Any] = None):
   ## get the tokenizer config from huggingface
   bos_token = ""
   eos_token = ""

@@ -2,7 +2,7 @@
 
 import json
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 import requests
 from jinja2.sandbox import ImmutableSandboxedEnvironment
@@ -382,7 +382,7 @@ def gemini_text_image_pt(messages: list):
 def hf_chat_template(model: str,
                      messages: list,
                      hf_token: str,
-                     chat_template: Optional[Any] = None):
+                     chat_template: Optional[Any] = None) -> List[str, Any]:
   ## get the tokenizer config from huggingface
   bos_token = ""
   eos_token = ""
@@ -471,7 +471,7 @@ def hf_chat_template(model: str,
           new_messages.append(reformatted_messages[-1])
           rendered_text = template.render(
               bos_token=bos_token, eos_token=eos_token, messages=new_messages)
-    return rendered_text
+    return rendered_text, chat_template
   except Exception as e:
     raise Exception(f"Error rendering template - {str(e)}")
 
@@ -581,7 +581,8 @@ def prompt_factory(
     ]:
       return alpaca_pt(messages=messages)
     else:
-      return hf_chat_template(original_model_name, messages, hf_token=hf_token)
+      messages, _ = hf_chat_template(original_model_name, messages, hf_token=hf_token)
+      return messages
   except Exception:
     return default_pt(
         messages=messages

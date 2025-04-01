@@ -1,4 +1,4 @@
-# This was taken from litellm
+# This was inspired from litellm
 
 from clarifai_datautils.text.prompt_factory import claude_2_1_pt, llama_2_chat_pt
 

@@ -11,6 +11,7 @@ import requests
 def default_pt(messages):
   return " ".join(message["content"] for message in messages)
 
+
 # alpaca prompt template - for models like mythomax, etc.
 def alpaca_pt(messages):
   prompt = custom_prompt(

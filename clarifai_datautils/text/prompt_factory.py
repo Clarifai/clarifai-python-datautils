@@ -1,11 +1,11 @@
 # This was taken from litellm
 
+import json
 from enum import Enum
 from typing import Any, Optional
-import json
-from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 import requests
+from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 
 def default_pt(messages):
@@ -225,6 +225,7 @@ def claude_2_1_pt(
     prompt += f"{AnthropicConstants.AI_PROMPT.value}"  # prompt must end with \"\n\nAssistant: " turn
   return prompt
 
+
 def anthropic_pt(
     messages: list,):  # format - https://docs.anthropic.com/claude/reference/complete_post
   """
@@ -378,110 +379,102 @@ def gemini_text_image_pt(messages: list):
   return content
 
 
-def hf_chat_template(model: str, messages: list, hf_token: str, chat_template: Optional[Any] = None):
-    ## get the tokenizer config from huggingface
-    bos_token = ""
-    eos_token = ""
-    if chat_template is None:
-        def _get_tokenizer_config(hf_model_name):
-            headers = {
-              "Authorization": f"Bearer {hf_token}"
-            }
-            url = (
-                f"https://huggingface.co/{hf_model_name}/raw/main/tokenizer_config.json"
-            )
-            # Make a GET request to fetch the JSON data
-            response = requests.get(url, headers=headers)
-            # print(response)
-            if response.status_code == 200:
-                # Parse the JSON data
-                tokenizer_config = json.loads(response.content)
-                return {"status": "success", "tokenizer": tokenizer_config}
-            else:
-                return {"status": "failure"}
+def hf_chat_template(model: str,
+                     messages: list,
+                     hf_token: str,
+                     chat_template: Optional[Any] = None):
+  ## get the tokenizer config from huggingface
+  bos_token = ""
+  eos_token = ""
+  if chat_template is None:
 
-        tokenizer_config = _get_tokenizer_config(model)
-        if (
-            tokenizer_config["status"] == "failure"
-            or "chat_template" not in tokenizer_config["tokenizer"]
-        ):
-            raise Exception("No chat template found")
-        ## read the bos token, eos token and chat template from the json
-        tokenizer_config = tokenizer_config["tokenizer"]
-        bos_token = tokenizer_config["bos_token"]
-        eos_token = tokenizer_config["eos_token"]
-        chat_template = tokenizer_config["chat_template"]
+    def _get_tokenizer_config(hf_model_name):
+      headers = {"Authorization": f"Bearer {hf_token}"}
+      url = (f"https://huggingface.co/{hf_model_name}/raw/main/tokenizer_config.json")
+      # Make a GET request to fetch the JSON data
+      response = requests.get(url, headers=headers)
+      # print(response)
+      if response.status_code == 200:
+        # Parse the JSON data
+        tokenizer_config = json.loads(response.content)
+        return {"status": "success", "tokenizer": tokenizer_config}
+      else:
+        return {"status": "failure"}
 
-    def raise_exception(message):
-        raise Exception(f"Error message - {message}")
+    tokenizer_config = _get_tokenizer_config(model)
+    if (tokenizer_config["status"] == "failure" or
+        "chat_template" not in tokenizer_config["tokenizer"]):
+      raise Exception("No chat template found")
+    ## read the bos token, eos token and chat template from the json
+    tokenizer_config = tokenizer_config["tokenizer"]
+    bos_token = tokenizer_config["bos_token"]
+    eos_token = tokenizer_config["eos_token"]
+    chat_template = tokenizer_config["chat_template"]
 
-    # Create a template object from the template text
-    env = ImmutableSandboxedEnvironment()
-    env.globals["raise_exception"] = raise_exception
+  def raise_exception(message):
+    raise Exception(f"Error message - {message}")
+
+  # Create a template object from the template text
+  env = ImmutableSandboxedEnvironment()
+  env.globals["raise_exception"] = raise_exception
+  try:
+    template = env.from_string(chat_template)
+  except Exception as e:
+    raise e
+
+  def _is_system_in_template():
     try:
-        template = env.from_string(chat_template)
-    except Exception as e:
-        raise e
+      # Try rendering the template with a system message
+      template.render(
+          messages=[{
+              "role": "system",
+              "content": "test"
+          }],
+          eos_token="<eos>",
+          bos_token="<bos>",
+      )
+      return True
 
-    def _is_system_in_template():
-        try:
-            # Try rendering the template with a system message
-            response = template.render(
-                messages=[{"role": "system", "content": "test"}],
-                eos_token="<eos>",
-                bos_token="<bos>",
-            )
-            return True
+    # This will be raised if Jinja attempts to render the system message and it can't
+    except Exception:
+      return False
 
-        # This will be raised if Jinja attempts to render the system message and it can't
-        except:
-            return False
+  try:
+    # Render the template with the provided values
+    if _is_system_in_template():
+      rendered_text = template.render(bos_token=bos_token, eos_token=eos_token, messages=messages)
+    else:
+      # treat a system message as a user message, if system not in template
+      try:
+        reformatted_messages = []
+        for message in messages:
+          if message["role"] == "system":
+            reformatted_messages.append({"role": "user", "content": message["content"]})
+          else:
+            reformatted_messages.append(message)
+        rendered_text = template.render(
+            bos_token=bos_token,
+            eos_token=eos_token,
+            messages=reformatted_messages,
+        )
+      except Exception as e:
+        if "Conversation roles must alternate user/assistant" in str(e):
+          # reformat messages to ensure user/assistant are alternating, if there's either 2 consecutive 'user' messages or 2 consecutive 'assistant' message, add a blank 'user' or 'assistant' message to ensure compatibility
+          new_messages = []
+          for i in range(len(reformatted_messages) - 1):
+            new_messages.append(reformatted_messages[i])
+            if (reformatted_messages[i]["role"] == reformatted_messages[i + 1]["role"]):
+              if reformatted_messages[i]["role"] == "user":
+                new_messages.append({"role": "assistant", "content": ""})
+              else:
+                new_messages.append({"role": "user", "content": ""})
+          new_messages.append(reformatted_messages[-1])
+          rendered_text = template.render(
+              bos_token=bos_token, eos_token=eos_token, messages=new_messages)
+    return rendered_text
+  except Exception as e:
+    raise Exception(f"Error rendering template - {str(e)}")
 
-    try:
-        # Render the template with the provided values
-        if _is_system_in_template():
-            rendered_text = template.render(
-                bos_token=bos_token, eos_token=eos_token, messages=messages
-            )
-        else:
-            # treat a system message as a user message, if system not in template
-            try:
-                reformatted_messages = []
-                for message in messages:
-                    if message["role"] == "system":
-                        reformatted_messages.append(
-                            {"role": "user", "content": message["content"]}
-                        )
-                    else:
-                        reformatted_messages.append(message)
-                rendered_text = template.render(
-                    bos_token=bos_token,
-                    eos_token=eos_token,
-                    messages=reformatted_messages,
-                )
-            except Exception as e:
-                if "Conversation roles must alternate user/assistant" in str(e):
-                    # reformat messages to ensure user/assistant are alternating, if there's either 2 consecutive 'user' messages or 2 consecutive 'assistant' message, add a blank 'user' or 'assistant' message to ensure compatibility
-                    new_messages = []
-                    for i in range(len(reformatted_messages) - 1):
-                        new_messages.append(reformatted_messages[i])
-                        if (
-                            reformatted_messages[i]["role"]
-                            == reformatted_messages[i + 1]["role"]
-                        ):
-                            if reformatted_messages[i]["role"] == "user":
-                                new_messages.append(
-                                    {"role": "assistant", "content": ""}
-                                )
-                            else:
-                                new_messages.append({"role": "user", "content": ""})
-                    new_messages.append(reformatted_messages[-1])
-                    rendered_text = template.render(
-                        bos_token=bos_token, eos_token=eos_token, messages=new_messages
-                    )
-        return rendered_text
-    except Exception as e:
-        raise Exception(f"Error rendering template - {str(e)}")
 
 # Function call template
 def function_call_prompt(messages: list, functions: list):
@@ -499,6 +492,7 @@ def function_call_prompt(messages: list, functions: list):
     messages.append({"role": "system", "content": f"""{function_prompt}"""})
 
   return messages
+
 
 # Custom prompt template
 def custom_prompt(
@@ -533,62 +527,62 @@ def custom_prompt(
   prompt += final_prompt_value
   return prompt
 
+
 def prompt_factory(
     model: str,
     messages: list,
     custom_llm_provider: Optional[str] = None,
     hf_token: Optional[str] = None,
 ):
-    original_model_name = model
-    model = model.lower()
-    if custom_llm_provider == "ollama":
-        return ollama_pt(model=model, messages=messages)
-    elif custom_llm_provider == "anthropic":
-        if any(_ in model for _ in ["claude-2.1", "claude-v2:1"]):
-            return claude_2_1_pt(messages=messages)
-        else:
-            return anthropic_pt(messages=messages)
-    elif custom_llm_provider == "gemini":
-        if model == "gemini-pro-vision":
-            return _gemini_vision_convert_messages(messages=messages)
-        else:
-            return gemini_text_image_pt(messages=messages)
-    try:
-        if "meta-llama/llama-2" in model and "chat" in model:
-            return llama_2_chat_pt(messages=messages)
-        elif "llama3" in model and "instruct" in model:
-            return hf_chat_template(
-                model="meta-llama/Meta-Llama-3-8B-Instruct",
-                messages=messages,
-            )
-        elif (
-            "tiiuae/falcon" in model
-        ):  # Note: for the instruct models, it's best to use a User: .., Assistant:.. approach in your prompt template.
-            if model == "tiiuae/falcon-180B-chat":
-                return falcon_chat_pt(messages=messages)
-            elif "instruct" in model:
-                return falcon_instruct_pt(messages=messages)
-        elif "mosaicml/mpt" in model:
-            if "chat" in model:
-                return mpt_chat_pt(messages=messages)
-        elif "codellama/codellama" in model:
-            if "instruct" in model:
-                return llama_2_chat_pt(
-                    messages=messages
-                )  # https://huggingface.co/blog/codellama#conversational-instructions
-        elif "wizardlm/wizardcoder" in model:
-            return wizardcoder_pt(messages=messages)
-        elif "phind/phind-codellama" in model:
-            return phind_codellama_pt(messages=messages)
-        elif model in [
-            "gryphe/mythomax-l2-13b",
-            "gryphe/mythomix-l2-13b",
-            "gryphe/mythologic-l2-13b",
-        ]:
-            return alpaca_pt(messages=messages)
-        else:
-            return hf_chat_template(original_model_name, messages, hf_token=hf_token)
-    except Exception as e:
-        return default_pt(
-            messages=messages
-        )  # default that covers Bloom, T-5, any non-chat tuned model (e.g. base Llama2)
+  original_model_name = model
+  model = model.lower()
+  if custom_llm_provider == "ollama":
+    return ollama_pt(model=model, messages=messages)
+  elif custom_llm_provider == "anthropic":
+    if any(_ in model for _ in ["claude-2.1", "claude-v2:1"]):
+      return claude_2_1_pt(messages=messages)
+    else:
+      return anthropic_pt(messages=messages)
+  elif custom_llm_provider == "gemini":
+    if model == "gemini-pro-vision":
+      return _gemini_vision_convert_messages(messages=messages)
+    else:
+      return gemini_text_image_pt(messages=messages)
+  try:
+    if "meta-llama/llama-2" in model and "chat" in model:
+      return llama_2_chat_pt(messages=messages)
+    elif "llama3" in model and "instruct" in model:
+      return hf_chat_template(
+          model="meta-llama/Meta-Llama-3-8B-Instruct",
+          messages=messages,
+      )
+    elif (
+        "tiiuae/falcon" in
+        model):  # Note: for the instruct models, it's best to use a User: .., Assistant:.. approach in your prompt template.
+      if model == "tiiuae/falcon-180B-chat":
+        return falcon_chat_pt(messages=messages)
+      elif "instruct" in model:
+        return falcon_instruct_pt(messages=messages)
+    elif "mosaicml/mpt" in model:
+      if "chat" in model:
+        return mpt_chat_pt(messages=messages)
+    elif "codellama/codellama" in model:
+      if "instruct" in model:
+        return llama_2_chat_pt(
+            messages=messages)  # https://huggingface.co/blog/codellama#conversational-instructions
+    elif "wizardlm/wizardcoder" in model:
+      return wizardcoder_pt(messages=messages)
+    elif "phind/phind-codellama" in model:
+      return phind_codellama_pt(messages=messages)
+    elif model in [
+        "gryphe/mythomax-l2-13b",
+        "gryphe/mythomix-l2-13b",
+        "gryphe/mythologic-l2-13b",
+    ]:
+      return alpaca_pt(messages=messages)
+    else:
+      return hf_chat_template(original_model_name, messages, hf_token=hf_token)
+  except Exception:
+    return default_pt(
+        messages=messages
+    )  # default that covers Bloom, T-5, any non-chat tuned model (e.g. base Llama2)

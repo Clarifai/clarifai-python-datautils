@@ -1,9 +1,9 @@
-# This was taken from litellm/litellm_core_utils/prompt_templates/factory.py
+# This was taken from litellm
 
 from enum import Enum
 from typing import Any, Optional
 import json
-from jinja2 import Environment
+from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 import requests
 
@@ -415,7 +415,7 @@ def hf_chat_template(model: str, messages: list, hf_token: str, chat_template: O
         raise Exception(f"Error message - {message}")
 
     # Create a template object from the template text
-    env = Environment()
+    env = ImmutableSandboxedEnvironment()
     env.globals["raise_exception"] = raise_exception
     try:
         template = env.from_string(chat_template)
@@ -555,6 +555,11 @@ def prompt_factory(
     try:
         if "meta-llama/llama-2" in model and "chat" in model:
             return llama_2_chat_pt(messages=messages)
+        elif "llama3" in model and "instruct" in model:
+            return hf_chat_template(
+                model="meta-llama/Meta-Llama-3-8B-Instruct",
+                messages=messages,
+            )
         elif (
             "tiiuae/falcon" in model
         ):  # Note: for the instruct models, it's best to use a User: .., Assistant:.. approach in your prompt template.

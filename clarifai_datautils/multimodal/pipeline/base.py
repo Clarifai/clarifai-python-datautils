@@ -74,7 +74,8 @@ class Pipeline:
     # Get files
     if files is not None:
       all_files = [files] if isinstance(files, str) else files
-      assert isinstance(all_files, list), 'Files should be a list of strings.'
+      if not isinstance(all_files, list):
+        raise TypeError('Files should be a list of strings.')
     elif folder is not None:
       all_files = [os.path.join(folder, f) for f in os.listdir(folder)]
 

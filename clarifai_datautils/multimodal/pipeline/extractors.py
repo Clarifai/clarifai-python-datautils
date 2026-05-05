@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from llama_index.core import Document
@@ -17,6 +18,8 @@ from clarifai_datautils.constants.pipeline import MAX_NODES, SKIP_NODES
 
 from .basetransform import BaseTransform
 
+logger = logging.getLogger(__name__)
+
 
 class LlamaIndexWrapper(BaseTransform):
   """ Wrapper class for LlamaIndex Extractor object. """
@@ -33,8 +36,8 @@ class LlamaIndexWrapper(BaseTransform):
     self.max_nodes = max_nodes
     self.skip_nodes = skip_nodes
     self.llama_extractor = llama_extractor
-    assert (self.llama_extractor.llm.to_dict()['class_name'] == 'ClarifaiLLM'
-           ), "Only Clarifai LLM Models are allowed for extraction."
+    if self.llama_extractor.llm.to_dict()['class_name'] != 'ClarifaiLLM':
+      raise ValueError("Only Clarifai LLM Models are allowed for extraction.")
     self.parser = SentenceSplitter()
 
   def __call__(self, elements: List[str]) -> List[str]:
@@ -187,8 +190,8 @@ class ExtractTextAfter(BaseTransform):
         if element.text:
           metadata = {self.key: extract_text_after(element.text, self.string)}
           element.metadata.update(ElementMetadata.from_dict(metadata))
-      except Exception:
-        pass
+      except Exception as exc:
+        logger.debug("ExtractTextAfter skipped an element: %s", exc)
     return elements
 
 
@@ -221,6 +224,6 @@ class ExtractTextBefore(BaseTransform):
         if element.text:
           metadata = {self.key: extract_text_before(element.text, self.string)}
           element.metadata.update(ElementMetadata.from_dict(metadata))
-      except Exception:
-        pass
+      except Exception as exc:
+        logger.debug("ExtractTextBefore skipped an element: %s", exc)
     return elements

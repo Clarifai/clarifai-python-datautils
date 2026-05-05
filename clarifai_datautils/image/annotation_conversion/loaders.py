@@ -135,8 +135,11 @@ class DetectionDataLoader(ClarifaiDataLoader):
         ])
         concept_ids.append(concept_id)
 
-    assert len(concept_ids) == len(annots), f"Num concepts must match num bbox annotations\
-        for a single image. Found {len(concept_ids)} concepts and {len(annots)} bboxes."
+    if len(concept_ids) != len(annots):
+      raise ValueError(
+          f"Num concepts must match num bbox annotations"
+          f" for a single image. Found {len(concept_ids)} concepts and {len(annots)} bboxes."
+      )
 
     return VisualDetectionFeatures(
         image_path,

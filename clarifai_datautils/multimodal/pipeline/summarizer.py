@@ -1,5 +1,5 @@
 import base64
-import random
+import secrets
 from typing import List
 
 try:
@@ -58,7 +58,7 @@ class ImageSummarizer(BaseTransform):
       if isinstance(element, Image):
         element.metadata.update(
             ElementMetadata.from_dict({
-                'input_id': f'{random.randint(1000000, 99999999)}'
+                'input_id': secrets.token_hex(4)
             }))
         img_elements.append(element)
     new_elements = self._summarize_image(img_elements)

@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -35,7 +35,7 @@ jobs:
         python -m nltk.downloader averaged_perceptron_tagger_eng
         python -m nltk.downloader punkt_tab
     - name: Run static analysis lint
-      uses: pre-commit/action@v3.0.1
+      uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
     - name: Run pytest
       shell: bash
       run: |

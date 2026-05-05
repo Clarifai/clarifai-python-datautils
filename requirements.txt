@@ -1,6 +1,6 @@
-llama-index-core==0.13.0
+llama-index-core==0.14.21
 llama-index-llms-clarifai==0.5.0
 pi_heif==0.18.0
-markdown==3.8.1
+markdown==3.10.2
 python-docx==1.1.2
 schema==0.7.5

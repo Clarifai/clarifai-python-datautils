@@ -13,6 +13,8 @@ jobs:
   annotation-tests:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
